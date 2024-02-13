@@ -27,16 +27,21 @@ comentario = []
 
 %%
 // ------------  Reglas Lexicas -------------------
-"("         {return new Symbol(sym.PARENTESIS_A, yycolumn, yyline, yytext());}
-")"         {return new Symbol(sym.PARENTESIS_C, yycolumn, yyline, yytext());}
-";"         {return new Symbol(sym.PUNTOYCOMA, yycolumn, yyline, yytext());}
+"("         {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.PARENTESIS_A, yycolumn, yyline, yytext());}
+")"         {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.PARENTESIS_C, yycolumn, yyline, yytext());}
+";"         {System.out.println("Token: " + yytext() + " Línea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.PUNTOYCOMA, yycolumn, yyline, yytext());}
 
-"*"         {return new Symbol(sym.POR, yycolumn, yyline, yytext());}
-"+"         {return new Symbol(sym.MAS, yycolumn, yyline, yytext());}
+"*"         {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.POR, yycolumn, yyline, yytext());}
+"+"         {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.MAS, yycolumn, yyline, yytext());}
 
-"mostrar"   {return new Symbol(sym.R_MOSTRAR, yycolumn, yyline, yytext());}
+"mostrar"   {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.R_MOSTRAR, yycolumn, yyline, yytext());}
 
-{entero}  { return new Symbol(sym.ENTERO, yycolumn, yyline, yytext()); }
+{entero}  {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.ENTERO, yycolumn, yyline, yytext()); }
+
+// verdadera Gramática
+
+"PROGRAM" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.R_PROGRAM, yycolumn, yyline, yytext());}
+"END PROGRAM" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.R_ENDPROGRAM, yycolumn, yyline, yytext());}
 
 
 

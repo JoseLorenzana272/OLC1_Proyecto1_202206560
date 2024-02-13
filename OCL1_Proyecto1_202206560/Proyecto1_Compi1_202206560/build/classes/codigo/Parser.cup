@@ -35,6 +35,9 @@ terminal String POR, MAS;
 terminal String R_MOSTRAR;
 terminal String ENTERO;
 
+//verdadera gramática
+terminal String R_PROGRAM, R_ENDPROGRAM;
+
 
 //------> Declaración de no terminales
 non terminal inicio;
@@ -53,7 +56,7 @@ start with inicio;
 
 // ------------>  Producciones  <------------
 
-inicio ::= lista_instr
+inicio ::= R_PROGRAM lista_instr R_ENDPROGRAM
 ;
 
 lista_instr ::= lista_instr instruccion
@@ -66,7 +69,7 @@ instruccion ::= mostrar
 mostrar ::= R_MOSTRAR PARENTESIS_A expresion:val PARENTESIS_C PUNTOYCOMA   {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.mostrar(val.toString()); :}
 ;
 
-expresion ::= expresion:a MAS expresion:b       {: RESULT = "SUM("+a.toString()+ ","+b.toString()+")" ; :}
-    | expresion:a POR expresion:b               {: RESULT = "MUL("+a.toString()+ ","+b.toString()+")" ; :}
-    | ENTERO:val                                {: RESULT = val; :}
+expresion ::= expresion:a MAS expresion:b       {: RESULT = (Integer)a + (Integer)b; :}
+    | expresion:a POR expresion:b               {: RESULT = (Integer)a * (Integer)b; :}
+    | ENTERO:val                                {: RESULT = Integer.parseInt(val.toString()); :}
 ;

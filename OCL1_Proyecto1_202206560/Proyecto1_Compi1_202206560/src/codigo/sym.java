@@ -10,7 +10,9 @@ public class sym {
   /* terminals */
   public static final int ENTERO = 8;
   public static final int POR = 5;
+  public static final int R_PROGRAM = 9;
   public static final int EOF = 0;
+  public static final int R_ENDPROGRAM = 10;
   public static final int MAS = 6;
   public static final int error = 1;
   public static final int PARENTESIS_C = 3;
@@ -26,7 +28,9 @@ public class sym {
   "POR",
   "MAS",
   "R_MOSTRAR",
-  "ENTERO"
+  "ENTERO",
+  "R_PROGRAM",
+  "R_ENDPROGRAM"
   };
 }
 

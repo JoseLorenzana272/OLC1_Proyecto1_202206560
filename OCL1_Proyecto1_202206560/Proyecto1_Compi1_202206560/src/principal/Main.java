@@ -15,7 +15,10 @@ public class Main {
         analizadores("src/codigo/", "Lexer.jflex", "Parser.cup");
         
         String entrada = """
+                         PROGRAM
                          MOSTRAR ( 2*7 + 3);
+                         MOStrAR(452+ 3);
+                         END PROGRAM
                          """;
         
         analizar(entrada); System.out.println(codigo.Parser.resultado);
