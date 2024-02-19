@@ -37,6 +37,8 @@ terminal String ENTERO;
 
 //verdadera gramática
 terminal String R_PROGRAM, R_ENDPROGRAM;
+terminal String R_VAR_DOUBLE, R_VAR_CHAR, ASIGNACION, FIN_DECLARACION;
+terminal String CADENA, DECIMAL, IDENTIFICADOR;
 
 
 //------> Declaración de no terminales
@@ -44,6 +46,7 @@ non terminal inicio;
 non terminal instruccion, mostrar;
 non terminal lista_instr;
 non terminal expresion;
+non terminal declaracion, asignacion;
 
 //------> PRECEDENCIA
 precedence left MAS;
@@ -64,12 +67,28 @@ lista_instr ::= lista_instr instruccion
 ;
 
 instruccion ::= mostrar
+    | declaracion
+    | asignacion
 ;
 
 mostrar ::= R_MOSTRAR PARENTESIS_A expresion:val PARENTESIS_C PUNTOYCOMA   {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.mostrar(val.toString()); :}
 ;
 
-expresion ::= expresion:a MAS expresion:b       {: RESULT = (Integer)a + (Integer)b; :}
-    | expresion:a POR expresion:b               {: RESULT = (Integer)a * (Integer)b; :}
-    | ENTERO:val                                {: RESULT = Integer.parseInt(val.toString()); :}
+expresion ::= expresion:a MAS expresion:b       {: RESULT = (Double)a + (Double)b; :}
+    | expresion:a POR expresion:b               {: RESULT = (Double)a * (Double)b; :}
+    | ENTERO:val                                {: RESULT = Double.parseDouble(val.toString()); :}
+    | DECIMAL:val                               {: RESULT = Double.parseDouble(val.toString()); :}
+    | CADENA:val                                {: RESULT = val.toString(); :}
+    | IDENTIFICADOR:val                         {: RESULT = func.Funcion.obtenerValor(val.toString()); :}
+;
+
+
+declaracion ::= R_VAR_DOUBLE IDENTIFICADOR ASIGNACION expresion:val FIN_DECLARACION
+    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.declararDouble(val.toString()); :}
+    | R_VAR_CHAR IDENTIFICADOR ASIGNACION CADENA:val FIN_DECLARACION
+    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.declararCadena(val.toString()); :}
+;
+
+asignacion ::= IDENTIFICADOR:nombreVariable ASIGNACION expresion:valor FIN_DECLARACION
+    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.asignarValor(nombreVariable.toString(), valor.toString()); :}
 ;

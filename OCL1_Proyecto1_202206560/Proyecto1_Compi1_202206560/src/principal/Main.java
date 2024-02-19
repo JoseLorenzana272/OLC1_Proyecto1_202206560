@@ -17,6 +17,8 @@ public class Main {
         String entrada = """
                          PROGRAM
                          MOSTRAR ( 2*7 + 3);
+                         var:double::numero <- 2.5 end;
+                         var:char[]::cadena <- "cadena" end;
                          MOStrAR(452+ 3);
                          END PROGRAM
                          """;
