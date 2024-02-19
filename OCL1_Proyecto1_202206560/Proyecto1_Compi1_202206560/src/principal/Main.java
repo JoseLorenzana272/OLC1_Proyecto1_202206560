@@ -17,7 +17,11 @@ public class Main {
         String entrada = """
                          PROGRAM
                          MOSTRAR ( 2*7 + 3);
+                         var:double::numero <- 2.5 end;
+                         var:char[]::cadena <- "cadena" end;
+                         arr:double::@darray <- [1, 2, 3, 4, 5] end;
                          MOStrAR(452+ 3);
+                         arr:char[]::@carray <- ["cadena1", "cadena2", "cadena3"] end;
                          END PROGRAM
                          """;
         

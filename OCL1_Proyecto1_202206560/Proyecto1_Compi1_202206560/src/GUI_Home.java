@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java_cup.Lexer;
@@ -218,7 +219,7 @@ private JTextArea getCurrentTextArea() {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        txtConsola = new javax.swing.JTextArea();
         btnAnterior = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
 
@@ -313,6 +314,11 @@ private JTextArea getCurrentTextArea() {
         btnReportes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8-reporte-de-negocios-40 (1).png"))); // NOI18N
         btnReportes.setText("Reportes");
         btnReportes.setPreferredSize(new java.awt.Dimension(135, 47));
+        btnReportes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportesActionPerformed(evt);
+            }
+        });
         pnlSide.add(btnReportes);
 
         btnSalir.setBackground(new java.awt.Color(34, 40, 44));
@@ -387,14 +393,13 @@ private JTextArea getCurrentTextArea() {
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8-consola-30.png"))); // NOI18N
         jLabel5.setText("Consola");
 
-        jTextArea2.setEditable(false);
-        jTextArea2.setBackground(new java.awt.Color(51, 51, 51));
-        jTextArea2.setColumns(20);
-        jTextArea2.setFont(new java.awt.Font("Corbel", 1, 14)); // NOI18N
-        jTextArea2.setForeground(new java.awt.Color(255, 255, 255));
-        jTextArea2.setRows(5);
-        jTextArea2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 0, true));
-        jScrollPane2.setViewportView(jTextArea2);
+        txtConsola.setBackground(new java.awt.Color(51, 51, 51));
+        txtConsola.setColumns(20);
+        txtConsola.setFont(new java.awt.Font("Corbel", 1, 14)); // NOI18N
+        txtConsola.setForeground(new java.awt.Color(255, 255, 255));
+        txtConsola.setRows(5);
+        txtConsola.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 0, true));
+        jScrollPane2.setViewportView(txtConsola);
 
         btnAnterior.setBackground(new java.awt.Color(34, 40, 44));
         btnAnterior.setFont(new java.awt.Font("Microsoft PhagsPa", 1, 14)); // NOI18N
@@ -430,7 +435,7 @@ private JTextArea getCurrentTextArea() {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                     .addComponent(btnSiguiente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
         pnlCenterLayout.setVerticalGroup(
             pnlCenterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -489,13 +494,46 @@ private JTextArea getCurrentTextArea() {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnEjecutarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEjecutarActionPerformed
-        // Obtener el JTextArea actualmente seleccionado
+
+        txtConsola.setText("");
+
         JTextArea currentTextArea = getCurrentTextArea();
 
-    // Obtener el contenido del JTextArea
+        if (currentTextArea != null) {
+            
+            String texto = currentTextArea.getText();
+
+            String resultado = analizar(texto);
+
+            txtConsola.append(resultado);
+        } else {
+            JOptionPane.showMessageDialog(this, "No se ha seleccionado ningún JTextArea.");
+        }
         
     }//GEN-LAST:event_btnEjecutarActionPerformed
 
+    private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
+        txtConsola.setText("");
+    }//GEN-LAST:event_btnReportesActionPerformed
+
+    public static String analizar(String entrada) {
+        try {
+            codigo.Lexer lexer = new codigo.Lexer(new StringReader(entrada)); 
+            codigo.Parser parser = new codigo.Parser(lexer);
+            parser.parse();
+            
+            return codigo.Parser.resultado;
+        } catch (Exception e) {
+            System.out.println("Error fatal en compilación de entrada.");
+            System.out.println(e);
+            return "Error: " + e.getMessage();
+        } 
+    }
+    
+    private void limpiarConsola(){
+        txtConsola.setText(null);
+    } 
+    
     /**
      * @param args the command line arguments
      */
@@ -551,9 +589,9 @@ private JTextArea getCurrentTextArea() {
     private javax.swing.JScrollBar jScrollBar1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JPanel pnlCenter;
     private javax.swing.JPanel pnlRoot;
     private javax.swing.JPanel pnlSide;
+    private javax.swing.JTextArea txtConsola;
     // End of variables declaration//GEN-END:variables
 }

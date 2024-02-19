@@ -8,17 +8,28 @@ package codigo;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int ENTERO = 8;
-  public static final int POR = 5;
-  public static final int R_PROGRAM = 9;
-  public static final int EOF = 0;
-  public static final int R_ENDPROGRAM = 10;
-  public static final int MAS = 6;
-  public static final int error = 1;
-  public static final int PARENTESIS_C = 3;
-  public static final int R_MOSTRAR = 7;
   public static final int PUNTOYCOMA = 4;
+  public static final int CADENA = 15;
+  public static final int FIN_DECLARACION = 14;
+  public static final int DECIMAL = 16;
+  public static final int LISTA_VALORES = 20;
+  public static final int POR = 5;
+  public static final int ASIGNACION = 13;
+  public static final int EOF = 0;
+  public static final int R_ARR_CHAR = 19;
+  public static final int PARENTESIS_C = 3;
+  public static final int error = 1;
+  public static final int R_ENDPROGRAM = 10;
+  public static final int R_VAR_CHAR = 12;
+  public static final int IDENTIFICADOR = 17;
   public static final int PARENTESIS_A = 2;
+  public static final int IDENTIFICADOR_ARREGLO = 21;
+  public static final int R_VAR_DOUBLE = 11;
+  public static final int R_PROGRAM = 9;
+  public static final int ENTERO = 8;
+  public static final int R_ARR_DOUBLE = 18;
+  public static final int R_MOSTRAR = 7;
+  public static final int MAS = 6;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -30,7 +41,18 @@ public class sym {
   "R_MOSTRAR",
   "ENTERO",
   "R_PROGRAM",
-  "R_ENDPROGRAM"
+  "R_ENDPROGRAM",
+  "R_VAR_DOUBLE",
+  "R_VAR_CHAR",
+  "ASIGNACION",
+  "FIN_DECLARACION",
+  "CADENA",
+  "DECIMAL",
+  "IDENTIFICADOR",
+  "R_ARR_DOUBLE",
+  "R_ARR_CHAR",
+  "LISTA_VALORES",
+  "IDENTIFICADOR_ARREGLO"
   };
 }
 
