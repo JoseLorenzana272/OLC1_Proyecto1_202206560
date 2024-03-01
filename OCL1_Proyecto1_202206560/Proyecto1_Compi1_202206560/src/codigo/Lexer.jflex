@@ -27,9 +27,18 @@ comentario = []
 cadena = \"[^\"\n]*\"
 decimal = [0-9]+(\.[0-9]+)?
 identificador = [a-zA-Z_][a-zA-Z_0-9]*
+//listas
+lista_valores = \[[^\]]*\]
+identificador_arreglo = @[a-zA-Z_][a-zA-Z_0-9]*
 
 %%
 // ------------  Reglas Lexicas -------------------
+"sum" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.R_SUM, yycolumn, yyline, yytext());}
+"res" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.R_RES, yycolumn, yyline, yytext());}
+"mul" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.R_MUL, yycolumn, yyline, yytext());}
+"div" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.R_DIV, yycolumn, yyline, yytext());}
+"mod" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.R_MOD, yycolumn, yyline, yytext());}
+
 "("         {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.PARENTESIS_A, yycolumn, yyline, yytext());}
 ")"         {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.PARENTESIS_C, yycolumn, yyline, yytext());}
 ";"         {System.out.println("Token: " + yytext() + " Línea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.PUNTOYCOMA, yycolumn, yyline, yytext());}
@@ -45,17 +54,32 @@ identificador = [a-zA-Z_][a-zA-Z_0-9]*
 
 "PROGRAM" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.R_PROGRAM, yycolumn, yyline, yytext());}
 "END PROGRAM" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.R_ENDPROGRAM, yycolumn, yyline, yytext());}
-"var:double::" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.R_VAR_DOUBLE, yycolumn, yyline, yytext());}
-"var:char[]::" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.R_VAR_CHAR, yycolumn, yyline, yytext());}
+
+//VARIABLES QUE SI FUNCIONAN
+"var" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.R_VAR, yycolumn, yyline, yytext());}
+":" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.COLLON, yycolumn, yyline, yytext());}
+"::" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.DOUBLE_COLLON, yycolumn, yyline, yytext());}
+"double" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.R_DOUBLE, yycolumn, yyline, yytext());}
+"char[]" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.R_CHAR, yycolumn, yyline, yytext());}
 "<-" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.ASIGNACION, yycolumn, yyline, yytext());}
-"end;" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.FIN_DECLARACION, yycolumn, yyline, yytext());}
+"end" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.FIN_DECLARACION, yycolumn, yyline, yytext());}
+
 
 {cadena} {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.CADENA, yycolumn, yyline, yytext());}
 {decimal} {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.DECIMAL, yycolumn, yyline, yytext());}
 {identificador} {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.IDENTIFICADOR, yycolumn, yyline, yytext());}
 
+//ARREGLOS
+"arr:double::" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.R_ARR_DOUBLE, yycolumn, yyline, yytext());}
+"arr:char[]::" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.R_ARR_CHAR, yycolumn, yyline, yytext());}
+{identificador_arreglo} {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.IDENTIFICADOR_ARREGLO, yycolumn, yyline, yytext());}
+{lista_valores} {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.LISTA_VALORES, yycolumn, yyline, yytext());}
 
+//ARREGLOS QUE SI SIRVEN 
 
+//Operaciones
+
+"," {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); return new Symbol(sym.COMMA, yycolumn, yyline, yytext());}
 
 comentario {}
 

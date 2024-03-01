@@ -17,12 +17,21 @@ public class Main {
         String entrada = """
                          PROGRAM
                          MOSTRAR ( 2*7 + 3);
-                         var:double::numero <- 2.5 end;
+                         var:   double::numero <- 2.5 end;
                          var:char[]::cadena <- "cadena" end;
+                         arr:double::@darray <- [1, 2, 3, 4, 5] end;
                          MOStrAR(452+ 3);
+                         arr:char[]::@carray <- ["cadena1", "cadena2", "cadena3"] end;
+                         var:double::hola <- SUM(5, 2) end;
+                         var:double::resta <- REs(8, 3) end;
+                         arr:double::@prueba <- [1, 5, 45, numero] end;
+                         arr:char[]::@carajo <- ["hola", "adios", "mañana"] end;
+                         var:double::multi <- MUL(5, 15) end;
+                         var:double::divi <- DIV(85,4) end;
+                         var:double::divi <- SUM(MUL(5,2),DIV(50,5)) end;
                          END PROGRAM
                          """;
-        
+        //arr:double::@queso <- [SUM(5, 2), 5, REs(8, 3), numero] end;
         analizar(entrada); System.out.println(codigo.Parser.resultado);
     }
     

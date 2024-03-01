@@ -9,21 +9,36 @@ package codigo;
 public class sym {
   /* terminals */
   public static final int PUNTOYCOMA = 4;
-  public static final int CADENA = 15;
-  public static final int FIN_DECLARACION = 14;
-  public static final int DECIMAL = 16;
+  public static final int CADENA = 14;
+  public static final int FIN_DECLARACION = 23;
+  public static final int DECIMAL = 15;
+  public static final int R_DIV = 31;
+  public static final int LISTA_VALORES = 26;
   public static final int POR = 5;
+  public static final int COMMA = 19;
   public static final int ASIGNACION = 13;
+  public static final int DOUBLE_COLLON = 18;
   public static final int EOF = 0;
+  public static final int R_ARR_CHAR = 25;
+  public static final int R_MUL = 30;
+  public static final int R_VAR = 20;
+  public static final int R_CHAR = 22;
   public static final int PARENTESIS_C = 3;
   public static final int error = 1;
   public static final int R_ENDPROGRAM = 10;
   public static final int R_VAR_CHAR = 12;
-  public static final int IDENTIFICADOR = 17;
+  public static final int IDENTIFICADOR = 16;
   public static final int PARENTESIS_A = 2;
+  public static final int R_MOD = 32;
+  public static final int IDENTIFICADOR_ARREGLO = 27;
+  public static final int R_DOUBLE = 21;
   public static final int R_VAR_DOUBLE = 11;
   public static final int R_PROGRAM = 9;
+  public static final int R_RES = 29;
   public static final int ENTERO = 8;
+  public static final int R_ARR_DOUBLE = 24;
+  public static final int COLLON = 17;
+  public static final int R_SUM = 28;
   public static final int R_MOSTRAR = 7;
   public static final int MAS = 6;
   public static final String[] terminalNames = new String[] {
@@ -41,10 +56,25 @@ public class sym {
   "R_VAR_DOUBLE",
   "R_VAR_CHAR",
   "ASIGNACION",
-  "FIN_DECLARACION",
   "CADENA",
   "DECIMAL",
-  "IDENTIFICADOR"
+  "IDENTIFICADOR",
+  "COLLON",
+  "DOUBLE_COLLON",
+  "COMMA",
+  "R_VAR",
+  "R_DOUBLE",
+  "R_CHAR",
+  "FIN_DECLARACION",
+  "R_ARR_DOUBLE",
+  "R_ARR_CHAR",
+  "LISTA_VALORES",
+  "IDENTIFICADOR_ARREGLO",
+  "R_SUM",
+  "R_RES",
+  "R_MUL",
+  "R_DIV",
+  "R_MOD"
   };
 }
 

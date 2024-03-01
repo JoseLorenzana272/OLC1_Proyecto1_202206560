@@ -495,12 +495,12 @@ private JTextArea getCurrentTextArea() {
 
     private void btnEjecutarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEjecutarActionPerformed
 
-        txtConsola.setText("");
+        
 
         JTextArea currentTextArea = getCurrentTextArea();
-
+        
         if (currentTextArea != null) {
-            
+            txtConsola.setText("");
             String texto = currentTextArea.getText();
 
             String resultado = analizar(texto);
@@ -531,7 +531,7 @@ private JTextArea getCurrentTextArea() {
     }
     
     private void limpiarConsola(){
-        txtConsola.setText(null);
+        txtConsola.setText("");
     } 
     
     /**

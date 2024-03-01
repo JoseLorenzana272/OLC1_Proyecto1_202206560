@@ -37,8 +37,15 @@ terminal String ENTERO;
 
 //verdadera gramática
 terminal String R_PROGRAM, R_ENDPROGRAM;
-terminal String R_VAR_DOUBLE, R_VAR_CHAR, ASIGNACION, FIN_DECLARACION;
-terminal String CADENA, DECIMAL, IDENTIFICADOR;
+terminal String R_VAR_DOUBLE, R_VAR_CHAR, ASIGNACION;
+terminal String CADENA, DECIMAL, IDENTIFICADOR, COLLON, DOUBLE_COLLON, COMMA;
+
+//VARIABLES
+terminal String R_VAR, R_DOUBLE, R_CHAR, FIN_DECLARACION;
+
+terminal String R_ARR_DOUBLE, R_ARR_CHAR;
+terminal String LISTA_VALORES, IDENTIFICADOR_ARREGLO;
+terminal String R_SUM, R_RES, R_MUL, R_DIV, R_MOD;
 
 
 //------> Declaración de no terminales
@@ -47,6 +54,9 @@ non terminal instruccion, mostrar;
 non terminal lista_instr;
 non terminal expresion;
 non terminal declaracion, asignacion;
+non terminal declaracion_arreglo;
+non terminal suma, resta, multi, division, modulo;
+
 
 //------> PRECEDENCIA
 precedence left MAS;
@@ -69,6 +79,7 @@ lista_instr ::= lista_instr instruccion
 instruccion ::= mostrar
     | declaracion
     | asignacion
+    | declaracion_arreglo
 ;
 
 mostrar ::= R_MOSTRAR PARENTESIS_A expresion:val PARENTESIS_C PUNTOYCOMA   {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.mostrar(val.toString()); :}
@@ -80,15 +91,48 @@ expresion ::= expresion:a MAS expresion:b       {: RESULT = (Double)a + (Double)
     | DECIMAL:val                               {: RESULT = Double.parseDouble(val.toString()); :}
     | CADENA:val                                {: RESULT = val.toString(); :}
     | IDENTIFICADOR:val                         {: RESULT = func.Funcion.obtenerValor(val.toString()); :}
+    | IDENTIFICADOR_ARREGLO:val                 {: RESULT = func.Funcion.obtenerValor(val.toString()); :}
+    | suma:val                                  {: RESULT = val; :}
+    | resta:val                                 {: RESULT = val; :}
+    | multi:val                                 {: RESULT = val; :}
+    | division:val                              {: RESULT = val; :}
+    | modulo:val                                {: RESULT = val; :}
 ;
 
+suma ::= R_SUM PARENTESIS_A expresion:a COMMA expresion:b PARENTESIS_C
+    {: RESULT = func.Funcion.sumar(a.toString(), b.toString()); :}
+;
 
-declaracion ::= R_VAR_DOUBLE IDENTIFICADOR ASIGNACION expresion:val FIN_DECLARACION
-    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.declararDouble(val.toString()); :}
-    | R_VAR_CHAR IDENTIFICADOR ASIGNACION CADENA:val FIN_DECLARACION
-    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.declararCadena(val.toString()); :}
+resta ::= R_RES PARENTESIS_A expresion:a COMMA expresion:b PARENTESIS_C
+    {: RESULT = func.Funcion.restar(a.toString(), b.toString()); :}
+;
+
+multi ::= R_MUL PARENTESIS_A expresion:a COMMA expresion:b PARENTESIS_C
+    {: RESULT = func.Funcion.multiplicar(a.toString(), b.toString()); :}
+;
+
+division ::= R_DIV PARENTESIS_A expresion:a COMMA expresion:b PARENTESIS_C
+    {: RESULT = func.Funcion.dividir(a.toString(), b.toString()); :}
+;
+
+modulo ::= R_MOD PARENTESIS_A expresion:a COMMA expresion:b PARENTESIS_C
+    {: RESULT = func.Funcion.modular(a.toString(), b.toString()); :}
+;
+
+//VARIABLES
+declaracion ::= R_VAR COLLON R_DOUBLE DOUBLE_COLLON IDENTIFICADOR:nombreVariable ASIGNACION expresion:val FIN_DECLARACION PUNTOYCOMA
+    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.declararDouble(nombreVariable.toString(), val.toString()); :}
+    | R_VAR COLLON R_CHAR DOUBLE_COLLON IDENTIFICADOR:nombreVariable ASIGNACION CADENA:val FIN_DECLARACION PUNTOYCOMA
+    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.declararCadena(nombreVariable.toString(), val.toString()); :}
 ;
 
 asignacion ::= IDENTIFICADOR:nombreVariable ASIGNACION expresion:valor FIN_DECLARACION
     {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.asignarValor(nombreVariable.toString(), valor.toString()); :}
+;
+
+//ARREGLO LISTA
+declaracion_arreglo ::= R_ARR_DOUBLE IDENTIFICADOR_ARREGLO:nombreArreglo ASIGNACION LISTA_VALORES:val FIN_DECLARACION PUNTOYCOMA
+    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.declararArregloDouble(nombreArreglo.toString(), val.toString()); :}
+    | R_ARR_CHAR IDENTIFICADOR_ARREGLO:nombreArreglo ASIGNACION LISTA_VALORES:val FIN_DECLARACION PUNTOYCOMA
+    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.declararArregloChar(nombreArreglo.toString(), val.toString()); :}
 ;
