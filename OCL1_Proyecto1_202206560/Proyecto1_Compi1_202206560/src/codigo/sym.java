@@ -8,39 +8,48 @@ package codigo;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
+  public static final int R_VAR_DOUBLE = 11;
+  public static final int R_ENDPROGRAM = 10;
+  public static final int POR = 5;
+  public static final int R_MUL = 30;
   public static final int PUNTOYCOMA = 4;
+  public static final int R_MEDIA = 33;
+  public static final int ENTERO = 8;
+  public static final int R_MOD = 32;
+  public static final int R_ARR_CHAR = 25;
+  public static final int R_PRINT = 40;
+  public static final int IDENTIFICADOR = 16;
+  public static final int IGUAL = 41;
+  public static final int R_VARIANZA = 36;
+  public static final int R_CONSOLE = 39;
+  public static final int COMMA = 19;
+  public static final int R_SUM = 28;
+  public static final int R_CHAR = 22;
+  public static final int EOF = 0;
+  public static final int DECIMAL = 15;
+  public static final int R_MAX = 37;
+  public static final int R_MOSTRAR = 7;
+  public static final int R_VAR = 20;
+  public static final int error = 1;
   public static final int CADENA = 14;
   public static final int FIN_DECLARACION = 23;
-  public static final int DECIMAL = 15;
-  public static final int R_DIV = 31;
-  public static final int LISTA_VALORES = 26;
-  public static final int POR = 5;
-  public static final int COMMA = 19;
   public static final int ASIGNACION = 13;
-  public static final int DOUBLE_COLLON = 18;
-  public static final int EOF = 0;
-  public static final int R_ARR_CHAR = 25;
-  public static final int R_MUL = 30;
-  public static final int R_VAR = 20;
-  public static final int R_CHAR = 22;
-  public static final int PARENTESIS_C = 3;
-  public static final int error = 1;
-  public static final int R_ENDPROGRAM = 10;
-  public static final int R_VAR_CHAR = 12;
-  public static final int IDENTIFICADOR = 16;
-  public static final int PARENTESIS_A = 2;
-  public static final int R_MOD = 32;
-  public static final int IDENTIFICADOR_ARREGLO = 27;
-  public static final int R_DOUBLE = 21;
-  public static final int R_VAR_DOUBLE = 11;
-  public static final int R_PROGRAM = 9;
   public static final int R_RES = 29;
-  public static final int ENTERO = 8;
-  public static final int R_ARR_DOUBLE = 24;
   public static final int COLLON = 17;
-  public static final int R_SUM = 28;
-  public static final int R_MOSTRAR = 7;
+  public static final int PARENTESIS_C = 3;
+  public static final int PARENTESIS_A = 2;
+  public static final int R_VAR_CHAR = 12;
+  public static final int DOUBLE_COLLON = 18;
+  public static final int R_DOUBLE = 21;
+  public static final int R_MEDIANA = 34;
+  public static final int R_PROGRAM = 9;
+  public static final int R_MODA = 35;
+  public static final int LISTA_VALORES = 26;
+  public static final int R_ARR_DOUBLE = 24;
+  public static final int R_DIV = 31;
+  public static final int R_MIN = 38;
   public static final int MAS = 6;
+  public static final int IDENTIFICADOR_ARREGLO = 27;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -74,7 +83,16 @@ public class sym {
   "R_RES",
   "R_MUL",
   "R_DIV",
-  "R_MOD"
+  "R_MOD",
+  "R_MEDIA",
+  "R_MEDIANA",
+  "R_MODA",
+  "R_VARIANZA",
+  "R_MAX",
+  "R_MIN",
+  "R_CONSOLE",
+  "R_PRINT",
+  "IGUAL"
   };
 }
 

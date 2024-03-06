@@ -46,7 +46,8 @@ terminal String R_VAR, R_DOUBLE, R_CHAR, FIN_DECLARACION;
 terminal String R_ARR_DOUBLE, R_ARR_CHAR;
 terminal String LISTA_VALORES, IDENTIFICADOR_ARREGLO;
 terminal String R_SUM, R_RES, R_MUL, R_DIV, R_MOD;
-
+terminal String R_MEDIA, R_MEDIANA, R_MODA, R_VARIANZA, R_MAX, R_MIN;
+terminal String R_CONSOLE, R_PRINT, IGUAL;
 
 //------> Declaración de no terminales
 non terminal inicio;
@@ -56,7 +57,8 @@ non terminal expresion;
 non terminal declaracion, asignacion;
 non terminal declaracion_arreglo;
 non terminal suma, resta, multi, division, modulo;
-
+non terminal media, mediana, moda, varianza, max, min;
+non terminal estadistica;
 
 //------> PRECEDENCIA
 precedence left MAS;
@@ -97,6 +99,7 @@ expresion ::= expresion:a MAS expresion:b       {: RESULT = (Double)a + (Double)
     | multi:val                                 {: RESULT = val; :}
     | division:val                              {: RESULT = val; :}
     | modulo:val                                {: RESULT = val; :}
+    | estadistica: val                                {: RESULT = val; :}
 ;
 
 suma ::= R_SUM PARENTESIS_A expresion:a COMMA expresion:b PARENTESIS_C
@@ -119,6 +122,8 @@ modulo ::= R_MOD PARENTESIS_A expresion:a COMMA expresion:b PARENTESIS_C
     {: RESULT = func.Funcion.modular(a.toString(), b.toString()); :}
 ;
 
+
+
 //VARIABLES
 declaracion ::= R_VAR COLLON R_DOUBLE DOUBLE_COLLON IDENTIFICADOR:nombreVariable ASIGNACION expresion:val FIN_DECLARACION PUNTOYCOMA
     {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.declararDouble(nombreVariable.toString(), val.toString()); :}
@@ -136,3 +141,33 @@ declaracion_arreglo ::= R_ARR_DOUBLE IDENTIFICADOR_ARREGLO:nombreArreglo ASIGNAC
     | R_ARR_CHAR IDENTIFICADOR_ARREGLO:nombreArreglo ASIGNACION LISTA_VALORES:val FIN_DECLARACION PUNTOYCOMA
     {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.declararArregloChar(nombreArreglo.toString(), val.toString()); :}
 ;
+
+// FUNCIONES ESTADÍSTICAS
+estadistica ::= R_MEDIA PARENTESIS_A LISTA_VALORES:val PARENTESIS_C
+    {: RESULT = func.Funcion.media(val.toString()); :}
+    | R_MEDIANA PARENTESIS_A LISTA_VALORES:val PARENTESIS_C
+    {: RESULT = func.Funcion.mediana(val.toString()); :}
+    | R_MODA PARENTESIS_A LISTA_VALORES:val PARENTESIS_C
+    {: RESULT = func.Funcion.moda(val.toString()); :}
+    | R_VARIANZA PARENTESIS_A LISTA_VALORES:val PARENTESIS_C
+    {: RESULT = func.Funcion.varianza(val.toString()); :}
+    | R_MAX PARENTESIS_A LISTA_VALORES:val PARENTESIS_C
+    {: RESULT = func.Funcion.maximo(val.toString()); :}
+    | R_MIN PARENTESIS_A LISTA_VALORES:val PARENTESIS_C
+    {: RESULT = func.Funcion.minimo(val.toString()); :}
+    | R_MEDIA PARENTESIS_A IDENTIFICADOR_ARREGLO:val PARENTESIS_C
+    {: RESULT = func.Funcion.media("@" + val.toString()); :}
+    | R_MEDIANA PARENTESIS_A IDENTIFICADOR_ARREGLO:val PARENTESIS_C
+    {: RESULT = func.Funcion.mediana("@" + val.toString()); :}
+    | R_MODA PARENTESIS_A IDENTIFICADOR_ARREGLO:val PARENTESIS_C
+    {: RESULT = func.Funcion.moda("@" + val.toString()); :}
+    | R_VARIANZA PARENTESIS_A IDENTIFICADOR_ARREGLO:val PARENTESIS_C
+    {: RESULT = func.Funcion.varianza("@" + val.toString()); :}
+    | R_MAX PARENTESIS_A IDENTIFICADOR_ARREGLO:val PARENTESIS_C
+    {: RESULT = func.Funcion.maximo("@" + val.toString()); :}
+    | R_MIN PARENTESIS_A IDENTIFICADOR_ARREGLO:val PARENTESIS_C
+    {: RESULT = func.Funcion.minimo("@" + val.toString()); :}
+
+    
+; 
+
