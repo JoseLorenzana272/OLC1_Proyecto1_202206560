@@ -8,6 +8,7 @@ package codigo;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
+  public static final int R_COLUMN = 42;
   public static final int R_VAR_DOUBLE = 11;
   public static final int R_ENDPROGRAM = 10;
   public static final int POR = 5;
@@ -35,6 +36,7 @@ public class sym {
   public static final int FIN_DECLARACION = 23;
   public static final int ASIGNACION = 13;
   public static final int R_RES = 29;
+  public static final int FLECHA = 43;
   public static final int COLLON = 17;
   public static final int PARENTESIS_C = 3;
   public static final int PARENTESIS_A = 2;
@@ -92,7 +94,9 @@ public class sym {
   "R_MIN",
   "R_CONSOLE",
   "R_PRINT",
-  "IGUAL"
+  "IGUAL",
+  "R_COLUMN",
+  "FLECHA"
   };
 }
 

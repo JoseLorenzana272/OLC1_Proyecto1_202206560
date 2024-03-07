@@ -47,7 +47,7 @@ terminal String R_ARR_DOUBLE, R_ARR_CHAR;
 terminal String LISTA_VALORES, IDENTIFICADOR_ARREGLO;
 terminal String R_SUM, R_RES, R_MUL, R_DIV, R_MOD;
 terminal String R_MEDIA, R_MEDIANA, R_MODA, R_VARIANZA, R_MAX, R_MIN;
-terminal String R_CONSOLE, R_PRINT, IGUAL;
+terminal String R_CONSOLE, R_PRINT, IGUAL, R_COLUMN, FLECHA;
 
 //------> Declaración de no terminales
 non terminal inicio;
@@ -59,6 +59,7 @@ non terminal declaracion_arreglo;
 non terminal suma, resta, multi, division, modulo;
 non terminal media, mediana, moda, varianza, max, min;
 non terminal estadistica;
+non terminal console_print, lista_expresiones, console_column;
 
 //------> PRECEDENCIA
 precedence left MAS;
@@ -82,6 +83,8 @@ instruccion ::= mostrar
     | declaracion
     | asignacion
     | declaracion_arreglo
+    | console_print
+    | console_column
 ;
 
 mostrar ::= R_MOSTRAR PARENTESIS_A expresion:val PARENTESIS_C PUNTOYCOMA   {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.mostrar(val.toString()); :}
@@ -168,6 +171,18 @@ estadistica ::= R_MEDIA PARENTESIS_A LISTA_VALORES:val PARENTESIS_C
     | R_MIN PARENTESIS_A IDENTIFICADOR_ARREGLO:val PARENTESIS_C
     {: RESULT = func.Funcion.minimo("@" + val.toString()); :}
 
-    
 ; 
 
+lista_expresiones ::= lista_expresiones:a COMMA expresion:b
+    {: RESULT = a.toString() + ", " + b.toString(); :}
+    | expresion:a
+    {: RESULT = a.toString(); :}
+;
+
+console_print ::= R_CONSOLE DOUBLE_COLLON R_PRINT IGUAL lista_expresiones:val FIN_DECLARACION PUNTOYCOMA
+    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.imprimir(val.toString()); :}
+;
+
+/*console_column ::= R_CONSOLE DOUBLE_COLLON R_COLUMN IGUAL CADENA:titulo FLECHA IDENTIFICADOR_ARREGLO:arreglo FIN_DECLARACION PUNTOYCOMA
+    {: codigo.Parser.resultado += func.Funcion.columna(titulo, arreglo); :}
+;*/

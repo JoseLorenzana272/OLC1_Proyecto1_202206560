@@ -4,14 +4,36 @@
  */
 package principal;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.io.StringReader;
+import java.net.URI;
+
 
 /**
  *
  * @author PERSONAL
  */
 public class Main {
+    
+    public static class Token {
+    public String type;
+    public String value;
+    public int line;
+    public int column;
+
+    public Token(String type, String value, int line, int column) {
+        this.type = type;
+        this.value = value;
+        this.line = line;
+        this.column = column;
+    }
+}
+    
     public static void main(String[] args) {
+        
         analizadores("src/codigo/", "Lexer.jflex", "Parser.cup");
         
         String entrada = """
@@ -42,12 +64,72 @@ public class Main {
                          var:double:: vari1 <- Varianza([2, numero, 8, 7, MOD(4,5)]) end;
                          var:double:: maxi1 <- MAX([2, numero, 8, 7, MOD(4,5)]) end;
                          var:double:: mitad <- DIV( SUM(Max(@darray), Min(@darray) ), 2) end;
+                         console::print = "holsdsda", 5, numero, SUM(2,1) end;
+                         console::print = 1, 2, SUM(3,5), Media(@queso) end;
                          END PROGRAM
                          """;
         
-        // var:double:: med1 <- Media([1, 2, SUM(3, 5), 4, 8]) end;
-        //arr:double::@queso <- [SUM(5, 2), 5, REs(8, 3), numero] end;
-        analizar(entrada); System.out.println(codigo.Parser.resultado);
+        analizar(entrada); 
+        System.out.println(codigo.Parser.resultado);
+
+        StringBuilder htmlTable = new StringBuilder();
+        htmlTable.append("<!DOCTYPE html>\n");
+        htmlTable.append("<html>\n");
+        htmlTable.append("<head>\n");
+        htmlTable.append("<title>Tokens</title>\n");
+        htmlTable.append("<style>\n");
+        htmlTable.append("table {\n");
+        htmlTable.append("  border-collapse: collapse;\n");
+        htmlTable.append("  width: 100%;\n");
+        htmlTable.append("}\n");
+        htmlTable.append("th, td {\n");
+        htmlTable.append("  border: 1px solid black;\n");
+        htmlTable.append("  padding: 8px;\n");
+        htmlTable.append("  text-align: left;\n");
+        htmlTable.append("}\n");
+        htmlTable.append("th {\n");
+        htmlTable.append("  background-color: #f2f2f2;\n");
+        htmlTable.append("}\n");
+        htmlTable.append("</style>\n");
+        htmlTable.append("</head>\n");
+        htmlTable.append("<body>\n");
+        htmlTable.append("<table>\n");
+        htmlTable.append("<tr><th>#</th><th>Token</th><th>Linea</th><th>Columna</th><th>Tipo</th></tr>\n");
+        
+        int tokenCount = 1; // Inicializamos el contador de tokens
+        
+        for (codigo.Token token : codigo.Lexer.tokens) {
+            htmlTable.append("<tr><td>");
+            htmlTable.append(tokenCount); // Agregamos el número de token
+            htmlTable.append("</td><td>");
+            htmlTable.append(token.type);
+            htmlTable.append("</td><td>");
+            htmlTable.append(token.line);
+            htmlTable.append("</td><td>");
+            htmlTable.append(token.column);
+            htmlTable.append("</td><td>");
+            htmlTable.append(token.name);
+            htmlTable.append("</td></tr>\n");
+            tokenCount++; // Incrementamos el contador de tokens
+        }
+        htmlTable.append("</table>\n");
+        htmlTable.append("</body>\n");
+        htmlTable.append("</html>\n");
+
+        String filename = "tokens.html";
+        try (PrintWriter out = new PrintWriter(filename)) {
+            out.println(htmlTable.toString());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        URI fileURI = new File(filename).toURI();
+
+        try {
+            Desktop.getDesktop().browse(fileURI);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     public static void analizadores(String ruta, String jflexFile, String cupFile){

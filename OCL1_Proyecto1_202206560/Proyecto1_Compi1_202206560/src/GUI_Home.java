@@ -1,6 +1,7 @@
 
 import java_cup.Lexer;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
+import java.net.URI;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java_cup.Lexer;
@@ -475,6 +477,7 @@ private JTextArea getCurrentTextArea() {
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         addNewTab("Nuevo Archivo " + tabCounter++);
+        txtConsola.setText("");
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -513,7 +516,52 @@ private JTextArea getCurrentTextArea() {
     }//GEN-LAST:event_btnEjecutarActionPerformed
 
     private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
-        txtConsola.setText("");
+        
+        StringBuilder htmlTable = new StringBuilder();
+        htmlTable.append("<!DOCTYPE html>\n");
+        htmlTable.append("<html>\n");
+        htmlTable.append("<head>\n");
+        htmlTable.append("<title>Tokens</title>\n");
+        htmlTable.append("<style>\n");
+        htmlTable.append("table {\n");
+        htmlTable.append("  border-collapse: collapse;\n");
+        htmlTable.append("  width: 100%;\n");
+        htmlTable.append("}\n");
+        htmlTable.append("th, td {\n");
+        htmlTable.append("  border: 1px solid black;\n");
+        htmlTable.append("  padding: 8px;\n");
+        htmlTable.append("  text-align: left;\n");
+        htmlTable.append("}\n");
+        htmlTable.append("th {\n");
+        htmlTable.append("  background-color: #f2f2f2;\n");
+        htmlTable.append("}\n");
+        htmlTable.append("</style>\n");
+        htmlTable.append("</head>\n");
+        htmlTable.append("<body>\n");
+        htmlTable.append("<table>\n");
+        htmlTable.append("<tr><th>#</th><th>Token</th><th>Linea</th><th>Columna</th><th>Tipo</th></tr>\n");
+
+        int tokenCount = 1; // Inicializamos el contador de tokens
+
+        for (codigo.Token token : codigo.Lexer.tokens) {
+            htmlTable.append("<tr><td>");
+            htmlTable.append(tokenCount); // Agregamos el número de token
+            htmlTable.append("</td><td>");
+            htmlTable.append(token.type);
+            htmlTable.append("</td><td>");
+            htmlTable.append(token.line);
+            htmlTable.append("</td><td>");
+            htmlTable.append(token.column);
+            htmlTable.append("</td><td>");
+            htmlTable.append(token.name);
+            htmlTable.append("</td></tr>\n");
+            tokenCount++; // Incrementamos el contador de tokens
+        }
+        htmlTable.append("</table>\n");
+        htmlTable.append("</body>\n");
+        htmlTable.append("</html>\n");
+
+        generateHTMLReport(htmlTable.toString());
     }//GEN-LAST:event_btnReportesActionPerformed
 
     public static String analizar(String entrada) {
@@ -532,7 +580,24 @@ private JTextArea getCurrentTextArea() {
     
     private void limpiarConsola(){
         txtConsola.setText("");
-    } 
+    }
+    
+    private void generateHTMLReport(String htmlContent) {
+    String filename = "tokens.html";
+    try (PrintWriter out = new PrintWriter(filename)) {
+        out.println(htmlContent);
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    }
+
+    URI fileURI = new File(filename).toURI();
+
+    try {
+        Desktop.getDesktop().browse(fileURI);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
     
     /**
      * @param args the command line arguments

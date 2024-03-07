@@ -1,5 +1,6 @@
 package func;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,22 +11,27 @@ public class Funcion {
     public static String mostrar(String expresion){
         return String.valueOf(expresion) + "\n";
     }
+    
+    public static String imprimir(String expresion){
+        return String.valueOf(expresion) + "\n";
+    }
+    
+    public static String columna(String titulo, String[] arreglo) {
+        StringBuilder resultado = new StringBuilder();
+        resultado.append("--------------\n");
+        resultado.append(titulo).append("\n");
+        resultado.append("--------------\n");
+        for (String elemento : arreglo) {
+            resultado.append(elemento).append("\n");
+        }
+        return resultado.toString();
+    }
+
+
 
     public static String declararDouble(String nombreVariable, String valor) {
         double numero = Double.parseDouble(valor);
-        /*String[] partes = valor.substring(1, valor.length() - 1).split(",(?![^()]*\\))");
-        double[] arreglo = new double[partes.length];
-        for (int i = 0; i < partes.length; i++) {
-            String parte = partes[i].trim();
-            if (parte.startsWith("SUM") || parte.startsWith("RES") || parte.startsWith("MUL") || parte.startsWith("DIV") || parte.startsWith("MOD")) {
-                
-                arreglo[i] = evaluarOperacion(parte);
-            } else if (variables.containsKey(parte)) {
-                arreglo[i] = (Double) variables.get(parte);
-            } else {
-                arreglo[i] = Double.parseDouble(parte);
-            }
-        }*/
+        
         variables.put(nombreVariable, numero);
         
         return "Variable '" + nombreVariable + "' de tipo double declarada con valor: " + numero + "\n";
