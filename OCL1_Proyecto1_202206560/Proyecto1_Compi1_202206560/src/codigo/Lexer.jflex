@@ -52,6 +52,15 @@ identificador_arreglo = @[a-zA-Z_][a-zA-Z_0-9]*
 "Max" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "R_MAX")); return new Symbol(sym.R_MAX, yycolumn, yyline, yytext());}
 "Min" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "R_MIN")); return new Symbol(sym.R_MIN, yycolumn, yyline, yytext());}
 
+//GRAFICAS
+"graphBar" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "GRAPHBAR")); return new Symbol(sym.GRAPHBAR, yycolumn, yyline, yytext());}
+"titulo" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "TITULO")); return new Symbol(sym.TITULO, yycolumn, yyline, yytext());}
+"ejeX" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "EJEX")); return new Symbol(sym.EJEX, yycolumn, yyline, yytext());}
+"ejeY" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "EJEY")); return new Symbol(sym.EJEY, yycolumn, yyline, yytext());}
+"tituloX" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "TITULOX")); return new Symbol(sym.TITULOX, yycolumn, yyline, yytext());}
+"tituloY" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "TITULOY")); return new Symbol(sym.TITULOY, yycolumn, yyline, yytext());}
+"EXEC graphBar" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "EXEC_GRAPHBAR")); return new Symbol(sym.EXEC_GRAPHBAR, yycolumn, yyline, yytext());}
+
 
 
 "("         {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "PARENTESIS_A")); return new Symbol(sym.PARENTESIS_A, yycolumn, yyline, yytext());}

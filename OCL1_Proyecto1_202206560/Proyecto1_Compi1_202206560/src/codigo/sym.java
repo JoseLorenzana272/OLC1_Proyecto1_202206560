@@ -19,11 +19,17 @@ public class sym {
   public static final int R_MOD = 32;
   public static final int R_ARR_CHAR = 25;
   public static final int R_PRINT = 40;
+  public static final int GRAPHBAR = 44;
+  public static final int TITULOY = 49;
+  public static final int TITULOX = 48;
+  public static final int EJEY = 47;
   public static final int IDENTIFICADOR = 16;
+  public static final int EJEX = 46;
   public static final int IGUAL = 41;
   public static final int R_VARIANZA = 36;
   public static final int R_CONSOLE = 39;
   public static final int COMMA = 19;
+  public static final int TITULO = 45;
   public static final int R_SUM = 28;
   public static final int R_CHAR = 22;
   public static final int EOF = 0;
@@ -32,6 +38,7 @@ public class sym {
   public static final int R_MOSTRAR = 7;
   public static final int R_VAR = 20;
   public static final int error = 1;
+  public static final int EXEC_GRAPHBAR = 50;
   public static final int CADENA = 14;
   public static final int FIN_DECLARACION = 23;
   public static final int ASIGNACION = 13;
@@ -96,7 +103,14 @@ public class sym {
   "R_PRINT",
   "IGUAL",
   "R_COLUMN",
-  "FLECHA"
+  "FLECHA",
+  "GRAPHBAR",
+  "TITULO",
+  "EJEX",
+  "EJEY",
+  "TITULOX",
+  "TITULOY",
+  "EXEC_GRAPHBAR"
   };
 }
 

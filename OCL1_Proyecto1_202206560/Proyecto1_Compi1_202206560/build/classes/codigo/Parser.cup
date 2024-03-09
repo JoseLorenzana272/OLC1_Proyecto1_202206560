@@ -48,6 +48,7 @@ terminal String LISTA_VALORES, IDENTIFICADOR_ARREGLO;
 terminal String R_SUM, R_RES, R_MUL, R_DIV, R_MOD;
 terminal String R_MEDIA, R_MEDIANA, R_MODA, R_VARIANZA, R_MAX, R_MIN;
 terminal String R_CONSOLE, R_PRINT, IGUAL, R_COLUMN, FLECHA;
+terminal String GRAPHBAR, TITULO, EJEX, EJEY, TITULOX, TITULOY, EXEC_GRAPHBAR;
 
 //------> Declaración de no terminales
 non terminal inicio;
@@ -59,7 +60,8 @@ non terminal declaracion_arreglo;
 non terminal suma, resta, multi, division, modulo;
 non terminal media, mediana, moda, varianza, max, min;
 non terminal estadistica;
-non terminal console_print, lista_expresiones, console_column;
+non terminal console_print, lista_expresiones, console_column, exp_string;
+non terminal graficacion;
 
 //------> PRECEDENCIA
 precedence left MAS;
@@ -85,6 +87,7 @@ instruccion ::= mostrar
     | declaracion_arreglo
     | console_print
     | console_column
+    | graficacion
 ;
 
 mostrar ::= R_MOSTRAR PARENTESIS_A expresion:val PARENTESIS_C PUNTOYCOMA   {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.mostrar(val.toString()); :}
@@ -103,6 +106,10 @@ expresion ::= expresion:a MAS expresion:b       {: RESULT = (Double)a + (Double)
     | division:val                              {: RESULT = val; :}
     | modulo:val                                {: RESULT = val; :}
     | estadistica: val                                {: RESULT = val; :}
+;
+
+exp_string ::= CADENA:val                                {: RESULT = val.toString(); :}
+| IDENTIFICADOR:val                         {: RESULT = func.Funcion.obtenerValor(val.toString()); :}
 ;
 
 suma ::= R_SUM PARENTESIS_A expresion:a COMMA expresion:b PARENTESIS_C
@@ -183,6 +190,20 @@ console_print ::= R_CONSOLE DOUBLE_COLLON R_PRINT IGUAL lista_expresiones:val FI
     {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.imprimir(val.toString()); :}
 ;
 
-/*console_column ::= R_CONSOLE DOUBLE_COLLON R_COLUMN IGUAL CADENA:titulo FLECHA IDENTIFICADOR_ARREGLO:arreglo FIN_DECLARACION PUNTOYCOMA
-    {: codigo.Parser.resultado += func.Funcion.columna(titulo, arreglo); :}
-;*/
+console_column ::= R_CONSOLE DOUBLE_COLLON R_COLUMN IGUAL exp_string:titulo FLECHA IDENTIFICADOR_ARREGLO:valores FIN_DECLARACION PUNTOYCOMA
+    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.imprimirColumna(titulo.toString(), "@" + valores.toString().substring(0)); :}
+    | R_CONSOLE DOUBLE_COLLON R_COLUMN IGUAL exp_string:titulo FLECHA LISTA_VALORES:valores FIN_DECLARACION PUNTOYCOMA
+    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.imprimirColumna(titulo.toString(), valores.toString()); :}
+;
+
+
+graficacion ::= GRAPHBAR PARENTESIS_A TITULO DOUBLE_COLLON R_CHAR IGUAL exp_string:titulo FIN_DECLARACION PUNTOYCOMA
+                EJEX DOUBLE_COLLON R_CHAR IGUAL LISTA_VALORES:valores1 FIN_DECLARACION PUNTOYCOMA
+                EJEY DOUBLE_COLLON R_DOUBLE IGUAL LISTA_VALORES:valores2 FIN_DECLARACION PUNTOYCOMA
+                TITULOX DOUBLE_COLLON R_CHAR IGUAL exp_string:tituloCX FIN_DECLARACION PUNTOYCOMA
+                TITULOY DOUBLE_COLLON R_CHAR IGUAL exp_string:tituloCY FIN_DECLARACION PUNTOYCOMA
+                EXEC_GRAPHBAR FIN_DECLARACION PUNTOYCOMA 
+                PARENTESIS_C FIN_DECLARACION PUNTOYCOMA 
+    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.graficarBarra(titulo.toString(), valores1.toString(), valores2.toString(), tituloCX.toString(), tituloCY.toString()); :}
+;
+

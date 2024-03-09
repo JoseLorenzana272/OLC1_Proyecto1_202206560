@@ -1,9 +1,15 @@
 package func;
 
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.JFrame;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 public class Funcion {
     private static Map<String, Object> variables = new HashMap<>();
@@ -16,37 +22,86 @@ public class Funcion {
         return String.valueOf(expresion) + "\n";
     }
     
-    public static String columna(String titulo, String[] arreglo) {
-        StringBuilder resultado = new StringBuilder();
-        resultado.append("--------------\n");
-        resultado.append(titulo).append("\n");
-        resultado.append("--------------\n");
-        for (String elemento : arreglo) {
-            resultado.append(elemento).append("\n");
+    public static String imprimirColumna(String titulo, String valores) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n--------------\n");
+
+        // Verificar si el título es un identificador de variable
+        if (titulo.startsWith("@")) {
+            titulo = titulo.substring(1);
+            Object valorTitulo = obtenerValor(titulo);
+            if (valorTitulo != null) {
+                sb.append(valorTitulo.toString());
+            } else {
+                throw new IllegalArgumentException("No se encontró un valor para el identificador '" + titulo + "'.");
+            }
+        } else {
+            sb.append(titulo);
         }
-        return resultado.toString();
+
+        sb.append("\n--------------\n");
+
+        // Verificar si los valores son un arreglo o una variable de arreglo
+        if (valores.startsWith("@")) {
+            // Si los valores comienzan con '@', es un identificador de arreglo
+            String nombreArreglo = valores.substring(1);
+            Object valor = obtenerValor(nombreArreglo);
+            if (valor instanceof double[]) {
+                double[] arregloDouble = (double[]) valor;
+                for (double valorDouble : arregloDouble) {
+                    sb.append(valorDouble).append("\n");
+                }
+            } else if (valor instanceof String[]) {
+                String[] arregloChar = (String[]) valor;
+                for (String valorChar : arregloChar) {
+                    sb.append(valorChar).append("\n");
+                }
+            } else {
+                throw new IllegalArgumentException("El valor de la variable '" + nombreArreglo + "' no es un arreglo.");
+            }
+        } else {
+            // Arreglo normal
+
+            String[] partes = valores.substring(1, valores.length() - 1).split(",(?![^()]*\\))");
+            double[] arreglo = new double[partes.length];
+            for (int i = 0; i < partes.length; i++) {
+                String parte = partes[i].trim();
+                if (parte.startsWith("SUM") || parte.startsWith("RES") || parte.startsWith("MUL") || parte.startsWith("DIV") || parte.startsWith("MOD")) {
+                    arreglo[i] = evaluarOperacion(parte);
+                } else if (parte.matches("[a-zA-Z]+")) {
+                    arreglo[i] = obtenerValor(parte) != null ? Double.parseDouble(obtenerValor(parte).toString()) : 0;
+                } else {
+                    arreglo[i] = Double.parseDouble(parte);
+                }
+            }
+            for (double valor : arreglo) {
+                sb.append(valor).append("\n"); // Añade el valor al StringBuilder seguido de un salto de línea
+            }
+        }
+        
+        return sb.toString();
     }
 
 
-
+    
     public static String declararDouble(String nombreVariable, String valor) {
         double numero = Double.parseDouble(valor);
         
         variables.put(nombreVariable, numero);
         
-        return "Variable '" + nombreVariable + "' de tipo double declarada con valor: " + numero + "\n";
+        return "";
     }
 
     public static String declararCadena(String nombreVariable, String valor) {
 
         variables.put(nombreVariable, valor);
-        return "Variable '" + nombreVariable + "' de tipo char[] declarada con valor: " + valor + "\n";
+        return "";
     }
 
     public static String asignarValor(String nombreVariable, String valor) {
         
         variables.put(nombreVariable, valor);
-        return "Variable '" + nombreVariable + "' actualizada con valor: " + valor + "\n";
+        return "";
     }
 
     public static Object obtenerValor(String nombreVariable) {
@@ -55,47 +110,48 @@ public class Funcion {
     }
     
     public static String declararArregloDouble(String nombreArreglo, String valores) {
-        String[] partes = valores.substring(1, valores.length() - 1).split(",(?![^()]*\\))");
-        double[] arreglo = new double[partes.length];
-        for (int i = 0; i < partes.length; i++) {
-            String parte = partes[i].trim();
-            if (parte.startsWith("SUM") || parte.startsWith("RES") || parte.startsWith("MUL") || parte.startsWith("DIV") || parte.startsWith("MOD")) {
-                
-                arreglo[i] = evaluarOperacion(parte);
-            } else if (variables.containsKey(parte)) {
-                arreglo[i] = (Double) variables.get(parte);
-            } else {
-                arreglo[i] = Double.parseDouble(parte);
-            }
-        }
-        for (double k:arreglo){
-            System.out.println("Melvin: "+k);
-        }
-        variables.put(nombreArreglo, arreglo);
-        
-        return "Arreglo " + nombreArreglo + " de tipo double declarado con valores: " + valores + "\n";
-    }
-
-    private static double evaluarOperacion(String operacion) {
-        if (operacion.startsWith("SUM")) {
-            String[] numeros = operacion.substring(4, operacion.length() - 1).split(",");
-            return Double.parseDouble(sumar(numeros[0].trim(), numeros[1].trim()));
-        } else if (operacion.startsWith("RES")) {
-            String[] numeros = operacion.substring(4, operacion.length() - 1).split(",");
-            return Double.parseDouble(restar(numeros[0].trim(), numeros[1].trim()));
-        } else if (operacion.startsWith("MUL")) {
-            String[] numeros = operacion.substring(4, operacion.length() - 1).split(",");
-            return Double.parseDouble(multiplicar(numeros[0].trim(), numeros[1].trim()));
-        } else if (operacion.startsWith("DIV")) {
-            String[] numeros = operacion.substring(4, operacion.length() - 1).split(",");
-            return Double.parseDouble(dividir(numeros[0].trim(), numeros[1].trim()));
-        } else if (operacion.startsWith("MOD")) {
-            String[] numeros = operacion.substring(4, operacion.length() - 1).split(",");
-            return Double.parseDouble(modular(numeros[0].trim(), numeros[1].trim()));
+    String[] partes = valores.substring(1, valores.length() - 1).split(",(?![^()]*\\))");
+    double[] arreglo = new double[partes.length];
+    for (int i = 0; i < partes.length; i++) {
+        String parte = partes[i].trim();
+        if (parte.startsWith("SUM") || parte.startsWith("RES") || parte.startsWith("MUL") || parte.startsWith("DIV") || parte.startsWith("MOD")) {
+            arreglo[i] = evaluarOperacion(parte);
+        } else if (parte.matches("[a-zA-Z]+")) {
+            arreglo[i] = obtenerValor(parte) != null ? Double.parseDouble(obtenerValor(parte).toString()) : 0;
         } else {
-            return Double.parseDouble(operacion);
+            arreglo[i] = Double.parseDouble(parte);
         }
     }
+    variables.put(nombreArreglo, arreglo);
+    return "";
+}
+
+private static double evaluarOperacion(String operacion) {
+    if (operacion.startsWith("SUM")) {
+        String[] numeros = operacion.substring(4, operacion.length() - 1).split(",");
+        /*if (numeros[0].startsWith("SUM") || numeros[0].startsWith("RES") || numeros[0].startsWith("MUL")|| numeros[0].startsWith("DIV")|| numeros[0].startsWith("MOD")){
+            String[] numeros2 = operacion.substring(4, operacion.length() - 1).split(",");
+            double resultado = evaluarOperacion(numeros2[0].trim()) + evaluarOperacion(numeros2[1].trim());
+            numeros[0] = String.valueOf(resultado);
+        }*/
+        return evaluarOperacion(numeros[0].trim()) + evaluarOperacion(numeros[1].trim());
+    } else if (operacion.startsWith("RES")) {
+        String[] numeros = operacion.substring(4, operacion.length() - 1).split(",");
+        return evaluarOperacion(numeros[0].trim()) - evaluarOperacion(numeros[1].trim());
+    } else if (operacion.startsWith("MUL")) {
+        String[] numeros = operacion.substring(4, operacion.length() - 1).split(",");
+        return evaluarOperacion(numeros[0].trim()) * evaluarOperacion(numeros[1].trim());
+    } else if (operacion.startsWith("DIV")) {
+        String[] numeros = operacion.substring(4, operacion.length() - 1).split(",");
+        return evaluarOperacion(numeros[0].trim()) / evaluarOperacion(numeros[1].trim());
+    } else if (operacion.startsWith("MOD")) {
+        String[] numeros = operacion.substring(4, operacion.length() - 1).split(",");
+        return evaluarOperacion(numeros[0].trim()) % evaluarOperacion(numeros[1].trim());
+    } else {
+        return Double.parseDouble(operacion);
+    }
+}
+
 
     private static double evaluarEstadistica(String opEstadistica){
         if (opEstadistica.startsWith("Media")) {
@@ -124,7 +180,10 @@ public class Funcion {
         String[] arreglo = parseStringArray(valores);
         
         variables.put(nombreArreglo, arreglo);
-        return "Arreglo " + nombreArreglo + " de tipo char[] declarado con valores: " + valores + "\n";
+        for (String val: arreglo){
+            System.out.println("Pato: "+val);
+        }
+        return "";
     }
 
     private static double[] parseDoubleArray(String valores) {
@@ -183,7 +242,7 @@ public class Funcion {
 
     private static String[] parseStringArray(String valores) {
         
-        String[] partes = valores.substring(1, valores.length() - 1).split(",");
+        String[] partes = valores.substring(0, valores.length()-1).split(",");
         String[] arreglo = new String[partes.length];
         for (int i = 0; i < partes.length; i++) {
             arreglo[i] = partes[i].trim().substring(1, partes[i].length() - 1);
@@ -382,6 +441,59 @@ public class Funcion {
         }
         return String.valueOf(min);
     }
+    
+    
+    public static String graficarBarra(String titulo, String valoresX, String valoresY, String tituloEjeX, String tituloEjeY) {
+        // Eliminar los corchetes de los valores de X y Y
+        valoresX = valoresX.replace("[", "").replace("]", "");
+        
+        String[] partes = valoresY.substring(1, valoresY.length() - 1).split(",(?![^()]*\\))");
+            double[] arreglo = new double[partes.length];
+            for (int i = 0; i < partes.length; i++) {
+                String parte = partes[i].trim();
+                if (parte.startsWith("SUM") || parte.startsWith("RES") || parte.startsWith("MUL") || parte.startsWith("DIV") || parte.startsWith("MOD")) {
+                    arreglo[i] = evaluarOperacion(parte);
+                } else if (parte.matches("[a-zA-Z]+")) {
+                    arreglo[i] = obtenerValor(parte) != null ? Double.parseDouble(obtenerValor(parte).toString()) : 0;
+                } else {
+                    arreglo[i] = Double.parseDouble(parte);
+                }
+            }
+            
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        // Dividir los valores de X y Y por comas
+        String[] partesX = valoresX.split(",");
+
+        // Agregar los valores al conjunto de datos
+        for (int i = 0; i < partesX.length; i++) {
+            dataset.addValue(arreglo[i], tituloEjeY, partesX[i]);
+        }
+
+        // Crear el gráfico de barras
+        JFreeChart chart = ChartFactory.createBarChart(
+                titulo,        // Título del gráfico
+                tituloEjeX,    // Etiqueta del eje X
+                tituloEjeY,    // Etiqueta del eje Y
+                dataset        // Conjunto de datos
+        );
+
+        // Crear un panel de gráfico y agregar el gráfico
+        ChartPanel chartPanel = new ChartPanel(chart);
+
+        // Crear un marco para la ventana y agregar el panel del gráfico
+        JFrame frame = new JFrame("Gráfico de Barras");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+        frame.add(chartPanel, BorderLayout.CENTER);
+        frame.pack();
+        frame.setVisible(true);
+
+        // Devolver un mensaje indicando que la gráfica se ha generado exitosamente
+        return "Gráfico de barras generado con éxito.";
+    }
+
 
 
 

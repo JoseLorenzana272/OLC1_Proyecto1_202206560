@@ -38,34 +38,42 @@ public class Main {
         
         String entrada = """
                          PROGRAM
-                         MOSTRAR ( 2*7 + 3);
-                         var:   double::numero <- 2.5 end;
-                         var:   double::Sazo <- 123.85 end;
-                         var:char[]::cadena <- "cadena" end;
-                         arr:double::@darray <- [1, 2, 3, 4, 5] end;
-                         MOStrAR(452+ 3);
-                         arr:char[]::@carray <- ["cadena1", "cadena2", "cadena3"] end;
-                         var:double::hola <- SUM(5, 2) end;
-                         var:double::resta <- REs(8, 3) end;
-                         arr:double::@prueba <- [1, 5, 45, numero, MUL(5, 7)] end;
-                         arr:char[]::@carajo <- ["hola", "adios", "mañana"] end;
-                         var:double::multi <- MUL(5, 15) end;
-                         var:double::divi <- DIV(85,4) end;
-                         arr:double::@queso <- [SUM(5, 2), 5, RES(8, 3), Sazo, MOD(85,2)] end;
-                         var:double::divi <- SUM(MUL(5,2),DIV(50,5)) end;
-                         var:double:: med1 <- Media([1, 2, 45, 4, 8]) end;
-                         var:double:: MARIO <- Media([RES(6,1), SUM(4,2), 4]) end;
-                         var:double:: med2 <- Media(@darray) end;
-                         var:double:: med3 <- Media([1, 2, SUM(4,2), 4]) end;
-                         var:double:: medianaaaa <- Mediana([2, 8, 4]) end;
-                         var:double:: medianaaaa2 <- Mediana([2, 8, 5, DIV(15,3)]) end;
-                         var:double:: modaaa <- Moda([2, 4, 2, 5, 6, 2]) end;
-                         var:double:: modaaa2 <- Moda([2, 4, 5, 6, 4, RES(8,4)]) end;
-                         var:double:: vari1 <- Varianza([2, numero, 8, 7, MOD(4,5)]) end;
-                         var:double:: maxi1 <- MAX([2, numero, 8, 7, MOD(4,5)]) end;
-                         var:double:: mitad <- DIV( SUM(Max(@darray), Min(@darray) ), 2) end;
-                         console::print = "holsdsda", 5, numero, SUM(2,1) end;
-                         console::print = 1, 2, SUM(3,5), Media(@queso) end;
+                         	
+                         	var:double:: notaAprobar <- 61 end;
+                         	var:char[]:: labelAprobar <- "Nota Minima" end;
+                         	
+                         	
+                         	arr:double:: @notas <- [notaAprobar, MUL(5, 0.45), DIV(100, 50)] end;
+                         	arr:char[]:: @labels <- [labelAprobar, "P1", "P2"] end;
+                         	var:double:: med1 <- Media([1, 2, SUM(3, 4), 4, 1]) end;
+                         	var:double:: mitad <- DIV( SUM(Max(@notas), Min(@notas) ), 2) end;
+                                console::print = med1, mitad end;
+                         	var:char[]:: titulo1 <- "Titulo histograma" end;
+                         	console::column = "test" -> [10, 15.5, 61.1] end;
+                         	console::column = "Notas" -> @notas end;
+                                console::column = "SazoGallo" -> [1, 2, 3, SUM(4,5)] end;
+                         	console::column = titulo1 -> @labels end;
+                                
+                         	
+                         	console::print = "Media", "Mediana", "Moda", "Varianza", "Max", "Min" end;
+                         	console::print = Media(@notas), Mediana(@notas), Moda(@notas), Varianza(@notas), Max(@notas), Min(@notas) end;
+                         	console::print = "Hola Mundo", MOD(10, 9), notaAprobar, labelAprobar end;
+                         	
+                    
+                         	
+                         	var:double:: gb1 <- 61 end;
+                         	var:char[]:: gbt <- "Datos" end;
+                         	
+                         	graphBar(
+                                                titulo::char[] = "PATO" end;
+                                                ejeX::char[] = ["1 Parcial", "2 parcial", "Final"] end;
+                                                ejeY::double = [61, SUM(20, 21), 70] end;
+                                		tituloX::char[] = "Actividades" end;
+                                		tituloY::char[] = gbt end;
+                                		EXEC graphBar end;
+                                	) end;
+
+                         
                          END PROGRAM
                          """;
         
