@@ -60,7 +60,14 @@ identificador_arreglo = @[a-zA-Z_][a-zA-Z_0-9]*
 "tituloX" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "TITULOX")); return new Symbol(sym.TITULOX, yycolumn, yyline, yytext());}
 "tituloY" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "TITULOY")); return new Symbol(sym.TITULOY, yycolumn, yyline, yytext());}
 "EXEC graphBar" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "EXEC_GRAPHBAR")); return new Symbol(sym.EXEC_GRAPHBAR, yycolumn, yyline, yytext());}
-
+"graphPie" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "GRAPHPIE")); return new Symbol(sym.GRAPHPIE, yycolumn, yyline, yytext());}
+"EXEC graphPie" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "EXEC_GRAPHPIE")); return new Symbol(sym.EXEC_GRAPHPIE, yycolumn, yyline, yytext());}
+"label" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "LABEL")); return new Symbol(sym.LABEL, yycolumn, yyline, yytext());}
+"values" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "VALUES")); return new Symbol(sym.VALUES, yycolumn, yyline, yytext());}
+"graphLine" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "GRAPHLINE")); return new Symbol(sym.GRAPHLINE, yycolumn, yyline, yytext());}
+"EXEC graphLine" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "EXEC_GRAPHLINE")); return new Symbol(sym.EXEC_GRAPHLINE, yycolumn, yyline, yytext());}
+"Histogram" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "HISTOGRAM")); return new Symbol(sym.HISTOGRAM, yycolumn, yyline, yytext());}
+"EXEC Histogram" {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "EXEC_HISTOGRAM")); return new Symbol(sym.EXEC_HISTOGRAM, yycolumn, yyline, yytext());}
 
 
 "("         {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "PARENTESIS_A")); return new Symbol(sym.PARENTESIS_A, yycolumn, yyline, yytext());}

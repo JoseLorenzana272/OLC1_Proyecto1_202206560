@@ -19,14 +19,26 @@ import java.net.URI;
 public class Main {
     
     public static class Token {
-    public String type;
-    public String value;
+        public String type;
+        public String value;
+        public int line;
+        public int column;
+
+        public Token(String type, String value, int line, int column) {
+            this.type = type;
+            this.value = value;
+            this.line = line;
+            this.column = column;
+        }
+    }
+    
+    public static class LexicalError {
+    public String errorMessage;
     public int line;
     public int column;
 
-    public Token(String type, String value, int line, int column) {
-        this.type = type;
-        this.value = value;
+    public LexicalError(String errorMessage, int line, int column) {
+        this.errorMessage = errorMessage;
         this.line = line;
         this.column = column;
     }
@@ -52,7 +64,7 @@ public class Main {
                          	console::column = "test" -> [10, 15.5, 61.1] end;
                          	console::column = "Notas" -> @notas end;
                                 console::column = "SazoGallo" -> [1, 2, 3, SUM(4,5)] end;
-                         	console::column = titulo1 -> @labels end;
+                         	console::column = titulo1 -> @notas end;
                                 
                          	
                          	console::print = "Media", "Mediana", "Moda", "Varianza", "Max", "Min" end;
@@ -66,12 +78,36 @@ public class Main {
                          	
                          	graphBar(
                                                 titulo::char[] = "PATO" end;
-                                                ejeX::char[] = ["1 Parcial", "2 parcial", "Final"] end;
-                                                ejeY::double = [61, SUM(20, 21), 70] end;
+                                                ejeX::char[] = ["1 Parcial", "2 parcial", "3 parcial", "Final"] end;
+                                                ejeY::double = [MUL(2,9), SUM(20, 21), 70, 4] end;
                                 		tituloX::char[] = "Actividades" end;
                                 		tituloY::char[] = gbt end;
                                 		EXEC graphBar end;
                                 	) end;
+                         
+                                graphPie(
+
+                                                label::char[] = ["Uno", "Dos", "Tres", "Cuatro"] end;
+                                                values::double = [5, 50, 30, 20] end;
+                                                titulo::char[] = gbt end;		
+                                                EXEC graphPie end;
+                         	) end;
+                         
+                         graphLine(
+                         	
+                         		titulo::char[] = "Gráfica de Línea" end;
+                         		ejeX::char[] = ["Uno", "Dos", "Tres"] end;
+                         		ejeY::double = [5, 50, 30] end;
+                         		tituloX::char[] = "Actividades" end;
+                         		tituloY::char[] = "Notas" end;
+                         		EXEC graphLine end;
+                         	) end;
+                         
+                         Histogram(
+                         		titulo::char[] = titulo1 end;
+                         		values::double = [2,2,3,5,5,7,8] end;
+                         		EXEC Histogram end;
+                         	) end;
 
                          
                          END PROGRAM

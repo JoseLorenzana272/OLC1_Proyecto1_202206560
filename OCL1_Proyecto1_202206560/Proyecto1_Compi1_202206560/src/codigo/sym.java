@@ -15,8 +15,11 @@ public class sym {
   public static final int R_MUL = 30;
   public static final int PUNTOYCOMA = 4;
   public static final int R_MEDIA = 33;
+  public static final int EXEC_HISTOGRAM = 58;
+  public static final int EXEC_GRAPHLINE = 56;
   public static final int ENTERO = 8;
   public static final int R_MOD = 32;
+  public static final int GRAPHPIE = 51;
   public static final int R_ARR_CHAR = 25;
   public static final int R_PRINT = 40;
   public static final int GRAPHBAR = 44;
@@ -32,6 +35,7 @@ public class sym {
   public static final int TITULO = 45;
   public static final int R_SUM = 28;
   public static final int R_CHAR = 22;
+  public static final int EXEC_GRAPHPIE = 52;
   public static final int EOF = 0;
   public static final int DECIMAL = 15;
   public static final int R_MAX = 37;
@@ -40,6 +44,7 @@ public class sym {
   public static final int error = 1;
   public static final int EXEC_GRAPHBAR = 50;
   public static final int CADENA = 14;
+  public static final int VALUES = 54;
   public static final int FIN_DECLARACION = 23;
   public static final int ASIGNACION = 13;
   public static final int R_RES = 29;
@@ -54,8 +59,11 @@ public class sym {
   public static final int R_PROGRAM = 9;
   public static final int R_MODA = 35;
   public static final int LISTA_VALORES = 26;
+  public static final int LABEL = 53;
   public static final int R_ARR_DOUBLE = 24;
   public static final int R_DIV = 31;
+  public static final int HISTOGRAM = 57;
+  public static final int GRAPHLINE = 55;
   public static final int R_MIN = 38;
   public static final int MAS = 6;
   public static final int IDENTIFICADOR_ARREGLO = 27;
@@ -110,7 +118,15 @@ public class sym {
   "EJEY",
   "TITULOX",
   "TITULOY",
-  "EXEC_GRAPHBAR"
+  "EXEC_GRAPHBAR",
+  "GRAPHPIE",
+  "EXEC_GRAPHPIE",
+  "LABEL",
+  "VALUES",
+  "GRAPHLINE",
+  "EXEC_GRAPHLINE",
+  "HISTOGRAM",
+  "EXEC_HISTOGRAM"
   };
 }
 
