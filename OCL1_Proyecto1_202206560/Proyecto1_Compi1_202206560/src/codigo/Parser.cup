@@ -1,7 +1,10 @@
 // ------------  Paquete e importaciones ------------
 package codigo ;
-
+import codigo.Errores;
+import codigo.Simbolos;
 import java_cup.runtime.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 //------> Codigo para el parser
@@ -9,11 +12,15 @@ import java_cup.runtime.*;
 
 parser code 
 {:
+    public static List<Errores> listaDeErrores = new ArrayList<>();
+    public static List<Simbolos> simbolos = new ArrayList<>();
     public static String resultado = ""; 
 
     public void syntax_error(Symbol s)
     {
-            System.err.println("Error Sintactico: "+ s.value + " - Fila: " + s.right + " - Columna: " + s.left + ". Recuperado" );
+           System.err.println("Error Sintactico: "+ s.value + " - Fila: " + s.right + " - Columna: " + s.left + ". Recuperado" );
+           Errores error = new Errores("Error Sintactico: " + s.value, s.right, s.left);
+            Parser.listaDeErrores.add(error);
     }
 
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
@@ -118,6 +125,8 @@ exp_string ::= CADENA:val                                {: RESULT = val.toStrin
 | IDENTIFICADOR:val                         {: RESULT = func.Funcion.obtenerValor(val.toString()); :}
 ;
 
+
+
 suma ::= R_SUM PARENTESIS_A expresion:a COMMA expresion:b PARENTESIS_C
     {: RESULT = func.Funcion.sumar(a.toString(), b.toString()); :}
 ;
@@ -142,9 +151,13 @@ modulo ::= R_MOD PARENTESIS_A expresion:a COMMA expresion:b PARENTESIS_C
 
 //VARIABLES
 declaracion ::= R_VAR COLLON R_DOUBLE DOUBLE_COLLON IDENTIFICADOR:nombreVariable ASIGNACION expresion:val FIN_DECLARACION PUNTOYCOMA
-    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.declararDouble(nombreVariable.toString(), val.toString()); :}
+    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.declararDouble(nombreVariable.toString(), val.toString()); 
+    Simbolos simbolo = new Simbolos(nombreVariable.toString(), valleft, valright, "variable double", val.toString());
+            Parser.simbolos.add(simbolo);:}
     | R_VAR COLLON R_CHAR DOUBLE_COLLON IDENTIFICADOR:nombreVariable ASIGNACION CADENA:val FIN_DECLARACION PUNTOYCOMA
-    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.declararCadena(nombreVariable.toString(), val.toString()); :}
+    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.declararCadena(nombreVariable.toString(), val.toString()); 
+    Simbolos simbolo = new Simbolos(nombreVariable.toString(), valleft, valright, "variable string", val.toString());
+            Parser.simbolos.add(simbolo);:}
 ;
 
 asignacion ::= IDENTIFICADOR:nombreVariable ASIGNACION expresion:valor FIN_DECLARACION
@@ -153,9 +166,13 @@ asignacion ::= IDENTIFICADOR:nombreVariable ASIGNACION expresion:valor FIN_DECLA
 
 //ARREGLO LISTA
 declaracion_arreglo ::= R_ARR_DOUBLE IDENTIFICADOR_ARREGLO:nombreArreglo ASIGNACION LISTA_VALORES:val FIN_DECLARACION PUNTOYCOMA
-    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.declararArregloDouble(nombreArreglo.toString(), val.toString()); :}
+    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.declararArregloDouble(nombreArreglo.toString(), val.toString()); 
+    Simbolos simbolo = new Simbolos(nombreArreglo.toString(), valleft, valright, "arreglo double", val.toString());
+            Parser.simbolos.add(simbolo);:}
     | R_ARR_CHAR IDENTIFICADOR_ARREGLO:nombreArreglo ASIGNACION LISTA_VALORES:val FIN_DECLARACION PUNTOYCOMA
-    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.declararArregloChar(nombreArreglo.toString(), val.toString()); :}
+    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.declararArregloChar(nombreArreglo.toString(), val.toString()); 
+    Simbolos simbolo = new Simbolos(nombreArreglo.toString(), valleft, valright, "arreglo string", val.toString());
+            Parser.simbolos.add(simbolo);:}
 ;
 
 // FUNCIONES ESTADÍSTICAS
@@ -211,6 +228,14 @@ graficacion ::= GRAPHBAR PARENTESIS_A TITULO DOUBLE_COLLON R_CHAR IGUAL exp_stri
                 EXEC_GRAPHBAR FIN_DECLARACION PUNTOYCOMA 
                 PARENTESIS_C FIN_DECLARACION PUNTOYCOMA 
     {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.graficarBarra(titulo.toString(), valores1.toString(), valores2.toString(), tituloCX.toString(), tituloCY.toString()); :}
+| GRAPHBAR PARENTESIS_A TITULO DOUBLE_COLLON R_CHAR IGUAL exp_string:titulo FIN_DECLARACION PUNTOYCOMA
+                EJEX DOUBLE_COLLON R_CHAR IGUAL IDENTIFICADOR_ARREGLO:valores1 FIN_DECLARACION PUNTOYCOMA
+                EJEY DOUBLE_COLLON R_DOUBLE IGUAL IDENTIFICADOR_ARREGLO:valores2 FIN_DECLARACION PUNTOYCOMA
+                TITULOX DOUBLE_COLLON R_CHAR IGUAL exp_string:tituloCX FIN_DECLARACION PUNTOYCOMA
+                TITULOY DOUBLE_COLLON R_CHAR IGUAL exp_string:tituloCY FIN_DECLARACION PUNTOYCOMA
+                EXEC_GRAPHBAR FIN_DECLARACION PUNTOYCOMA 
+                PARENTESIS_C FIN_DECLARACION PUNTOYCOMA 
+    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.graficarBarra(titulo.toString(), valores1.toString(), "@" + valores2.toString(), tituloCX.toString(), tituloCY.toString()); :}
 ;
 
 graficacionPie ::= GRAPHPIE PARENTESIS_A LABEL DOUBLE_COLLON R_CHAR IGUAL LISTA_VALORES:valores1 FIN_DECLARACION PUNTOYCOMA
@@ -219,6 +244,12 @@ graficacionPie ::= GRAPHPIE PARENTESIS_A LABEL DOUBLE_COLLON R_CHAR IGUAL LISTA_
                    EXEC_GRAPHPIE FIN_DECLARACION PUNTOYCOMA
                    PARENTESIS_C FIN_DECLARACION PUNTOYCOMA
     {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.graficarPie(titulo.toString(), valores1.toString(), valores2.toString()); :}
+    | GRAPHPIE PARENTESIS_A LABEL DOUBLE_COLLON R_CHAR IGUAL IDENTIFICADOR_ARREGLO:valores1 FIN_DECLARACION PUNTOYCOMA
+                   VALUES DOUBLE_COLLON R_DOUBLE IGUAL IDENTIFICADOR_ARREGLO:valores2 FIN_DECLARACION PUNTOYCOMA
+                   TITULO DOUBLE_COLLON R_CHAR IGUAL exp_string:titulo FIN_DECLARACION PUNTOYCOMA
+                   EXEC_GRAPHPIE FIN_DECLARACION PUNTOYCOMA
+                   PARENTESIS_C FIN_DECLARACION PUNTOYCOMA
+    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.graficarPie(titulo.toString(), valores1.toString(), "@" + valores2.toString()); :}
 ;
 
 graficacionLine ::= GRAPHLINE PARENTESIS_A TITULO DOUBLE_COLLON R_CHAR IGUAL exp_string:titulo FIN_DECLARACION PUNTOYCOMA
@@ -237,6 +268,14 @@ graficacionLine ::= GRAPHLINE PARENTESIS_A TITULO DOUBLE_COLLON R_CHAR IGUAL exp
                 EXEC_GRAPHLINE FIN_DECLARACION PUNTOYCOMA 
                 PARENTESIS_C FIN_DECLARACION PUNTOYCOMA 
     {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.graficarLinea(titulo.toString(), valores1.toString(), "@" + valores2.toString(), tituloCX.toString(), tituloCY.toString()); :}
+    | GRAPHLINE PARENTESIS_A TITULO DOUBLE_COLLON R_CHAR IGUAL exp_string:titulo FIN_DECLARACION PUNTOYCOMA
+                EJEX DOUBLE_COLLON R_CHAR IGUAL LISTA_VALORES:valores1 FIN_DECLARACION PUNTOYCOMA
+                EJEY DOUBLE_COLLON R_DOUBLE IGUAL IDENTIFICADOR_ARREGLO:valores2 FIN_DECLARACION PUNTOYCOMA
+                TITULOX DOUBLE_COLLON R_CHAR IGUAL exp_string:tituloCX FIN_DECLARACION PUNTOYCOMA
+                TITULOY DOUBLE_COLLON R_CHAR IGUAL exp_string:tituloCY FIN_DECLARACION PUNTOYCOMA
+                EXEC_GRAPHLINE FIN_DECLARACION PUNTOYCOMA 
+                PARENTESIS_C FIN_DECLARACION PUNTOYCOMA 
+    {: codigo.Parser.resultado = codigo.Parser.resultado + func.Funcion.graficarLinea(titulo.toString(), valores1.toString(), valores2.toString(), tituloCX.toString(), tituloCY.toString()); :}
 
 ;
 

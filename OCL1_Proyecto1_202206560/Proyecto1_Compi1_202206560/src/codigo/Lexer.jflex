@@ -20,6 +20,8 @@ import java.util.List;
 
 %{
     public static List<Token> tokens = new ArrayList<>();
+    public static List<Errores> errores = new ArrayList<>();
+
 %} 
 
 // ------> Expresiones Regulares 
@@ -34,6 +36,8 @@ identificador = [a-zA-Z_][a-zA-Z_0-9]*
 //listas
 lista_valores = \[[^\]]*\]
 identificador_arreglo = @[a-zA-Z_][a-zA-Z_0-9]*
+comentario_linea = "!"[^\n]*
+comentario_multilinea = "<!"[^!]*"!>"
 
 %%
 // ------------  Reglas Lexicas -------------------
@@ -113,11 +117,12 @@ identificador_arreglo = @[a-zA-Z_][a-zA-Z_0-9]*
 
 "," {System.out.println("Token: " + yytext() + " Linea: " + yyline + " Columna: " + yycolumn); tokens.add(new Token(yytext(), yyline, yycolumn, "COMMA")); return new Symbol(sym.COMMA, yycolumn, yyline, yytext());}
 
-comentario {}
+{comentario_linea} {/* No hace nada, solo ignora los comentarios de una línea */}
+{comentario_multilinea} {/* No hace nada, solo ignora los comentarios multilínea */}
 
 //------> Ingorados 
 [ \t\r\n\f]     {/* Espacios en blanco se ignoran */}
 
 //------> Errores Léxicos 
-.              	{ System.out.println("Error Lexico: " + yytext() + " | Fila:" + yyline + " | Columna: " + yycolumn); }
+.              	{ System.out.println("Error Lexico: " + yytext() + " | Fila:" + yyline + " | Columna: " + yycolumn); errores.add(new Errores("Error Lexico: "+yytext(), yyline, yycolumn));}
 

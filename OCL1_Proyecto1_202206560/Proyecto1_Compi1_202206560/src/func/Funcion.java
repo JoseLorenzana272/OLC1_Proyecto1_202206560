@@ -1,6 +1,8 @@
 package func;
 
 import java.awt.BorderLayout;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -8,6 +10,7 @@ import java.util.Map;
 import javax.swing.JFrame;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -117,6 +120,7 @@ public class Funcion {
     double[] arreglo = new double[partes.length];
     for (int i = 0; i < partes.length; i++) {
         String parte = partes[i].trim();
+        System.out.println("Goomba: "+parte);
         if (parte.startsWith("SUM") || parte.startsWith("RES") || parte.startsWith("MUL") || parte.startsWith("DIV") || parte.startsWith("MOD")) {
             arreglo[i] = evaluarOperacion(parte);
         } else if (parte.matches("[a-zA-Z]+")) {
@@ -447,112 +451,6 @@ private static double evaluarOperacion(String operacion) {
     
     
     public static String graficarBarra(String titulo, String valoresX, String valoresY, String tituloEjeX, String tituloEjeY) {
-        // Eliminar los corchetes de los valores de X y Y
-        valoresX = valoresX.replace("[", "").replace("]", "");
-        
-        String[] partes = valoresY.substring(1, valoresY.length() - 1).split(",(?![^()]*\\))");
-            double[] arreglo = new double[partes.length];
-            for (int i = 0; i < partes.length; i++) {
-                String parte = partes[i].trim();
-                if (parte.startsWith("SUM") || parte.startsWith("RES") || parte.startsWith("MUL") || parte.startsWith("DIV") || parte.startsWith("MOD")) {
-                    arreglo[i] = evaluarOperacion(parte);
-                } else if (parte.matches("[a-zA-Z]+")) {
-                    arreglo[i] = obtenerValor(parte) != null ? Double.parseDouble(obtenerValor(parte).toString()) : 0;
-                } else {
-                    arreglo[i] = Double.parseDouble(parte);
-                }
-            }
-            
-
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-        // Dividir los valores de X y Y por comas
-        String[] partesX = valoresX.split(",");
-
-        // Agregar los valores al conjunto de datos
-        for (int i = 0; i < partesX.length; i++) {
-            dataset.addValue(arreglo[i], tituloEjeY, partesX[i]);
-        }
-
-        // Crear el gráfico de barras
-        JFreeChart chart = ChartFactory.createBarChart(
-                titulo,        // Título del gráfico
-                tituloEjeX,    // Etiqueta del eje X
-                tituloEjeY,    // Etiqueta del eje Y
-                dataset        // Conjunto de datos
-        );
-
-        // Crear un panel de gráfico y agregar el gráfico
-        ChartPanel chartPanel = new ChartPanel(chart);
-
-        // Crear un marco para la ventana y agregar el panel del gráfico
-        JFrame frame = new JFrame("Gráfico de Barras");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-        frame.add(chartPanel, BorderLayout.CENTER);
-        frame.pack();
-        frame.setVisible(true);
-
-        // Devolver un mensaje indicando que la gráfica se ha generado exitosamente
-        return "Gráfico de barras generado con éxito.";
-    }
-
-    public static String graficarPie(String titulo, String etiquetas, String valores) {
-        // Eliminar los corchetes de las etiquetas y los valores
-        etiquetas = etiquetas.replace("[", "").replace("]", "");
-        valores = valores.replace("[", "").replace("]", "");
-
-        // Dividir las etiquetas y los valores por comas
-        String[] partesEtiquetas = etiquetas.split(",");
-        String[] partesValores = valores.split(",");
-
-        // Evaluar las operaciones y asignar los valores al arreglo
-        double[] arreglo = new double[partesValores.length];
-        for (int i = 0; i < partesValores.length; i++) {
-            String parteValor = partesValores[i].trim();
-            if (parteValor.startsWith("SUM") || parteValor.startsWith("RES") || parteValor.startsWith("MUL") || parteValor.startsWith("DIV") || parteValor.startsWith("MOD")) {
-                arreglo[i] = evaluarOperacion(parteValor);
-            } else if (parteValor.matches("[a-zA-Z]+")) {
-                Object valorVariable = obtenerValor(parteValor);
-                arreglo[i] = valorVariable != null ? Double.parseDouble(valorVariable.toString()) : 0;
-            } else {
-                arreglo[i] = Double.parseDouble(parteValor);
-            }
-        }
-
-        // Crear un conjunto de datos para el gráfico de pie
-        DefaultPieDataset dataset = new DefaultPieDataset();
-
-        // Agregar las etiquetas y los valores al conjunto de datos
-        for (int i = 0; i < partesEtiquetas.length; i++) {
-            dataset.setValue(partesEtiquetas[i].trim(), arreglo[i]);
-        }
-
-        // Crear el gráfico de pie
-        JFreeChart chart = ChartFactory.createPieChart(
-                titulo,    // Título del gráfico
-                dataset,   // Conjunto de datos
-                true,      // Mostrar leyenda
-                true,      // Mostrar tooltips
-                false      // No mostrar URLs
-        );
-
-        // Crear un panel de gráfico y agregar el gráfico
-        ChartPanel chartPanel = new ChartPanel(chart);
-
-        // Crear un marco para la ventana y agregar el panel del gráfico
-        JFrame frame = new JFrame("Gráfico de Pie");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-        frame.add(chartPanel, BorderLayout.CENTER);
-        frame.pack();
-        frame.setVisible(true);
-
-        // Devolver un mensaje indicando que el gráfico se ha generado exitosamente
-        return "Gráfico de pie generado con éxito.";
-    }
-
-    public static String graficarLinea(String titulo, String valoresX, String valoresY, String tituloEjeX, String tituloEjeY) {
     // Eliminar los corchetes de los valores de X y Y
     valoresX = valoresX.replace("[", "").replace("]", "");
     
@@ -561,6 +459,7 @@ private static double evaluarOperacion(String operacion) {
         // Es un nombre de arreglo
         String nombreArreglo = valoresY.substring(1);
         Object valor = obtenerValor(nombreArreglo);
+        
         if (valor != null) {
             arregloY = (double[]) valor;
         } else {
@@ -587,10 +486,189 @@ private static double evaluarOperacion(String operacion) {
 
     // Dividir los valores de X por comas
     String[] partesX = valoresX.split(",");
+    if (partesX[0].startsWith("@")) {
+        // Es un nombre de arreglo
+        Object valor = obtenerValor(partesX[0]);
+        
+        if (valor != null) {
+            partesX = (String[]) valor;
+            for(double val: arregloY){
+                System.out.println("Yoshi: "+val);
+            }
+        } else {
+            throw new IllegalArgumentException("Arreglo " + partesX[0] + " no definido.");
+        }
+    }
 
     // Agregar los valores al conjunto de datos
     for (int i = 0; i < partesX.length; i++) {
         dataset.addValue(arregloY[i], tituloEjeY, partesX[i]);
+    }
+
+    // Crear el gráfico de barras
+    JFreeChart chart = ChartFactory.createBarChart(
+            titulo,        // Título del gráfico
+            tituloEjeX,    // Etiqueta del eje X
+            tituloEjeY,    // Etiqueta del eje Y
+            dataset        // Conjunto de datos
+    );
+
+    try {
+        // Guardar el gráfico como una imagen PNG
+        ChartUtilities.saveChartAsPNG(new File("C:/Users/PERSONAL/OneDrive/Desktop/pruebas/graficoB.png"), chart, 400, 200);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return "Error al guardar el gráfico.";
+    }
+
+    // Devolver un mensaje indicando que la gráfica se ha generado exitosamente
+    return "";
+}
+
+
+    public static String graficarPie(String titulo, String etiquetas, String valores) {
+    // Eliminar los corchetes de las etiquetas y los valores
+    etiquetas = etiquetas.replace("[", "").replace("]", "");
+    valores = valores.replace("[", "").replace("]", "");
+
+    // Dividir las etiquetas por comas
+    String[] partesEtiquetas;
+    String[] partesValores;
+    
+    if (etiquetas.startsWith("@")) {
+        // Es un nombre de arreglo
+        String nombreArreglo = etiquetas.substring(1);
+        Object valor = obtenerValor(nombreArreglo);
+        
+        if (valor != null) {
+            partesEtiquetas = (String[]) valor;
+        } else {
+            throw new IllegalArgumentException("Arreglo " + nombreArreglo + " no definido.");
+        }
+    } else {
+        // Etiquetas normales
+        partesEtiquetas = etiquetas.split(",");
+    }
+
+    double[] arreglo;
+    
+    if (valores.startsWith("@")) {
+        // Es un nombre de arreglo
+        String nombreArreglo = valores.substring(1);
+        Object valor = obtenerValor(nombreArreglo);
+        
+        if (valor != null) {
+            arreglo = (double[]) valor;
+        } else {
+            throw new IllegalArgumentException("Arreglo " + nombreArreglo + " no definido.");
+        }
+    } else {
+        // Arreglo normal
+        partesValores = valores.split(",");
+        arreglo = new double[partesValores.length];
+        for (int i = 0; i < partesValores.length; i++) {
+            String parteValor = partesValores[i].trim();
+            if (parteValor.startsWith("SUM") || parteValor.startsWith("RES") || parteValor.startsWith("MUL") || parteValor.startsWith("DIV") || parteValor.startsWith("MOD")) {
+                arreglo[i] = evaluarOperacion(parteValor);
+            } else if (parteValor.matches("[a-zA-Z]+")) {
+                Object valorVariable = obtenerValor(parteValor);
+                arreglo[i] = valorVariable != null ? Double.parseDouble(valorVariable.toString()) : 0;
+            } else {
+                arreglo[i] = Double.parseDouble(parteValor);
+            }
+        }
+    }
+
+    // Crear un conjunto de datos para el gráfico de pie
+    DefaultPieDataset dataset = new DefaultPieDataset();
+
+    // Agregar las etiquetas y los valores al conjunto de datos
+    for (int i = 0; i < partesEtiquetas.length; i++) {
+        dataset.setValue(partesEtiquetas[i].trim(), arreglo[i]);
+    }
+
+    // Crear el gráfico de pie
+    JFreeChart chart = ChartFactory.createPieChart(
+            titulo,    // Título del gráfico
+            dataset,   // Conjunto de datos
+            true,      // Mostrar leyenda
+            true,      // Mostrar tooltips
+            false      // No mostrar URLs
+    );
+
+    // Crear un panel de gráfico y agregar el gráfico
+    try {
+        // Guardar el gráfico como una imagen PNG
+        ChartUtilities.saveChartAsPNG(new File("C:/Users/PERSONAL/OneDrive/Desktop/pruebas/graficoPie.png"), chart, 400, 200);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return "Error al guardar el gráfico.";
+    }
+
+    
+    return "";
+}
+
+
+    public static String graficarLinea(String titulo, String valoresX, String valoresY, String tituloEjeX, String tituloEjeY) {
+    // Eliminar los corchetes de los valores de X y Y
+    valoresX = valoresX.replace("[", "").replace("]", "");
+    
+    double[] arregloY;
+    if (valoresY.startsWith("@")) {
+        // Es un nombre de arreglo
+        String nombreArreglo = valoresY.substring(1);
+        Object valor = obtenerValor(nombreArreglo);
+        
+        if (valor != null) {
+            arregloY = (double[]) valor;
+            for(double val: arregloY){
+                System.out.println("Yoshi: "+val);
+            }
+        } else {
+            throw new IllegalArgumentException("Arreglo " + nombreArreglo + " no definido.");
+        }
+    } else {
+        // Arreglo normal
+        String[] partes = valoresY.substring(1, valoresY.length() - 1).split(",(?![^()]*\\))");
+        arregloY = new double[partes.length];
+        for (int i = 0; i < partes.length; i++) {
+            String parte = partes[i].trim();
+            if (parte.startsWith("SUM") || parte.startsWith("RES") || parte.startsWith("MUL") || parte.startsWith("DIV") || parte.startsWith("MOD")) {
+                arregloY[i] = evaluarOperacion(parte);
+            } else if (parte.matches("[a-zA-Z]+")) {
+                Object valorVariable = obtenerValor(parte);
+                arregloY[i] = valorVariable != null ? Double.parseDouble(valorVariable.toString()) : 0;
+            } else {
+                arregloY[i] = Double.parseDouble(parte);
+            }
+        }
+    }
+
+    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+    // Dividir los valores de X por comas
+    String[] partesX = valoresX.split(",");
+    if (partesX[0].startsWith("@")) {
+        // Es un nombre de arreglo
+        Object valor = obtenerValor(partesX[0]);
+        
+        if (valor != null) {
+            partesX = (String[]) valor;
+            for(double val: arregloY){
+                System.out.println("Yoshi: "+val);
+            }
+        } else {
+            throw new IllegalArgumentException("Arreglo " + partesX[0] + " no definido.");
+        }
+    }
+    for(String val: partesX){
+        System.out.println("Wario: "+val);
+    }
+    // Agregar los valores al conjunto de datos
+    for (int i = 0; i < partesX.length; i++) {
+        dataset.addValue(arregloY[i], tituloEjeY, partesX[i]);
+        System.out.println("Birdo: "+ arregloY[i]);
     }
 
     // Crear el gráfico de líneas
@@ -602,45 +680,41 @@ private static double evaluarOperacion(String operacion) {
     );
 
     // Crear un panel de gráfico y agregar el gráfico
-    ChartPanel chartPanel = new ChartPanel(chart);
+    try {
+        // Guardar el gráfico como una imagen PNG
+        ChartUtilities.saveChartAsPNG(new File("C:/Users/PERSONAL/OneDrive/Desktop/pruebas/graficoLinea.png"), chart, 400, 200);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return "Error al guardar el gráfico.";
+    }
 
-    // Crear un marco para la ventana y agregar el panel del gráfico
-    JFrame frame = new JFrame("Gráfico de Línea");
-    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    frame.setLayout(new BorderLayout());
-    frame.add(chartPanel, BorderLayout.CENTER);
-    frame.pack();
-    frame.setVisible(true);
-
-    // Devolver un mensaje indicando que la gráfica se ha generado exitosamente
-    return "Gráfico de línea generado con éxito.";
+    return "";
 }
+    
 
 
 
 public static String graficarhistograma(String titulo, String valores) {
-        // Eliminar los corchetes de los valores
+     
         valores = valores.replace("[", "").replace("]", "");
 
-        // Dividir los valores por comas y convertirlos a un arreglo de doubles
+        
         String[] partes = valores.split(",");
         double[] arreglo = new double[partes.length];
         for (int i = 0; i < partes.length; i++) {
             arreglo[i] = Double.parseDouble(partes[i].trim());
         }
 
-        // Crear un mapa para almacenar la frecuencia de cada valor único
+  
         Map<Double, Integer> frecuencia = new HashMap<>();
         for (double valor : arreglo) {
             frecuencia.put(valor, frecuencia.getOrDefault(valor, 0) + 1);
         }
 
-        // Crear un conjunto para almacenar los valores únicos
-        // Esto garantiza que solo tengamos un valor único una vez
+
         Double[] valoresUnicos = frecuencia.keySet().toArray(new Double[0]);
         Arrays.sort(valoresUnicos);
 
-        // Calcular la frecuencia acumulada y la frecuencia relativa
         int fa = 0;
         StringBuilder analysis = new StringBuilder();
         analysis.append("Analisis de Arreglo\n");
@@ -662,34 +736,32 @@ public static String graficarhistograma(String titulo, String valores) {
 
         // Crear el conjunto de datos para el histograma
         HistogramDataset dataset = new HistogramDataset();
-        dataset.addSeries("Histograma", arreglo, 10); // 10 es el número de barras
+        dataset.addSeries("Histograma", arreglo, 10); 
 
-        // Crear el gráfico de histograma
+  
         JFreeChart chart = ChartFactory.createXYBarChart(
-        titulo,            // Título del gráfico
-        "Valor",           // Etiqueta del eje X
-        false,             // Invertir eje X
-        "Frecuencia",      // Etiqueta del eje Y
-        dataset,           // Conjunto de datos
-        PlotOrientation.VERTICAL,  // Orientación del gráfico
-        true,              // Mostrar leyenda
-        true,              // Mostrar tooltips
-        false              // No mostrar URLs
+        titulo,            
+        "Valor",          
+        false,             
+        "Frecuencia",      
+        dataset,          
+        PlotOrientation.VERTICAL,  
+        true,        
+        true,             
+        false            
 );
 
-        // Crear un panel de gráfico y agregar el gráfico
-        ChartPanel chartPanel = new ChartPanel(chart);
 
-        // Crear un marco para la ventana y agregar el panel del gráfico
-        JFrame frame = new JFrame("Histograma");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-        frame.add(chartPanel, BorderLayout.CENTER);
-        frame.pack();
-        frame.setVisible(true);
+        try {
+        // Guardar el gráfico como una imagen PNG
+        ChartUtilities.saveChartAsPNG(new File("C:/Users/PERSONAL/OneDrive/Desktop/pruebas/histograma.png"), chart, 400, 200);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return "Error al guardar el gráfico.";
+    }
 
-        // Devolver un mensaje indicando que el histograma se ha generado exitosamente
-        return "Histograma generado con éxito.";
+
+        return analysis.toString();
     }
 
 }

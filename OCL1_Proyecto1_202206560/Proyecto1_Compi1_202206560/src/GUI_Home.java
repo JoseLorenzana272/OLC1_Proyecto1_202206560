@@ -5,6 +5,7 @@ import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -22,6 +23,8 @@ import java.net.URI;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java_cup.Lexer;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -45,9 +48,18 @@ public class GUI_Home extends javax.swing.JFrame {
 
     private JTabbedPane tabbedPane;
     private int tabCounter = 1;
+    private final java.util.List<ImageIcon> graficas = new java.util.ArrayList<>();
+    private int graficaActualIndex = -1; // Índice de la gráfica actualmente mostrada
+    private ImageIcon graficaActual;
     
     public GUI_Home() {
         initComponents();
+        /*mostrarImagenEnJLabel("C:/Users/PERSONAL/OneDrive/Desktop/pruebas/graficoB.png");
+        graficas.add(new ImageIcon("C:/Users/PERSONAL/OneDrive/Desktop/pruebas/graficoB.png"));
+        graficas.add(new ImageIcon("C:/Users/PERSONAL/OneDrive/Desktop/pruebas/graficoPie.png"));
+        graficas.add(new ImageIcon("C:/Users/PERSONAL/OneDrive/Desktop/pruebas/graficoLinea.png"));
+        graficas.add(new ImageIcon("C:/Users/PERSONAL/OneDrive/Desktop/pruebas/histograma.png"));
+        mostrarSiguienteImagen();*/
         tabbedPane = jTabbedPane1;
         customizeTabbedPane();
         JButton [] btns = {btnEjecutar, btnAbrir, btnGuardar, btnNuevo, btnReportes, btnSalir, btnAnterior, btnSiguiente};
@@ -108,9 +120,25 @@ public class GUI_Home extends javax.swing.JFrame {
         });
     }
     
+    public void mostrarSiguienteImagen() {
+        if (!graficas.isEmpty()) {
+            graficaActualIndex = (graficaActualIndex + 1) % graficas.size();
+            ImageIcon grafica = graficas.get(graficaActualIndex);
+            jLabel2.setIcon(grafica);
+        }
+    }
+    
+    public void mostrarAnteriorImagen() {
+        if (!graficas.isEmpty()) {
+            graficaActualIndex = (graficaActualIndex - 1 + graficas.size()) % graficas.size();
+            ImageIcon grafica = graficas.get(graficaActualIndex);
+            jLabel2.setIcon(grafica);
+        }
+    }
+    
     private void openFile() {
     JFileChooser fileChooser = new JFileChooser();
-    FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de texto (*.txt)", "txt");
+    FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de texto (*.df)", "df");
     fileChooser.setFileFilter(filter);
 
     int result = fileChooser.showOpenDialog(this);
@@ -408,12 +436,22 @@ private JTextArea getCurrentTextArea() {
         btnAnterior.setForeground(new java.awt.Color(153, 153, 153));
         btnAnterior.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8-anterior-35.png"))); // NOI18N
         btnAnterior.setPreferredSize(new java.awt.Dimension(135, 47));
+        btnAnterior.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnteriorActionPerformed(evt);
+            }
+        });
 
         btnSiguiente.setBackground(new java.awt.Color(34, 40, 44));
         btnSiguiente.setFont(new java.awt.Font("Microsoft PhagsPa", 1, 14)); // NOI18N
         btnSiguiente.setForeground(new java.awt.Color(153, 153, 153));
         btnSiguiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8-siguiente-35.png"))); // NOI18N
         btnSiguiente.setPreferredSize(new java.awt.Dimension(135, 47));
+        btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiguienteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlCenterLayout = new javax.swing.GroupLayout(pnlCenter);
         pnlCenter.setLayout(pnlCenterLayout);
@@ -512,9 +550,28 @@ private JTextArea getCurrentTextArea() {
         } else {
             JOptionPane.showMessageDialog(this, "No se ha seleccionado ningún JTextArea.");
         }
+        mostrarImagenEnJLabel("C:/Users/PERSONAL/OneDrive/Desktop/pruebas/graficoB.png");
+    graficas.add(new ImageIcon("C:/Users/PERSONAL/OneDrive/Desktop/pruebas/graficoB.png"));
+    mostrarImagenEnJLabel("C:/Users/PERSONAL/OneDrive/Desktop/pruebas/graficoPie.png");
+    graficas.add(new ImageIcon("C:/Users/PERSONAL/OneDrive/Desktop/pruebas/graficoPie.png"));
+    mostrarImagenEnJLabel("C:/Users/PERSONAL/OneDrive/Desktop/pruebas/graficoLinea.png");
+    graficas.add(new ImageIcon("C:/Users/PERSONAL/OneDrive/Desktop/pruebas/graficoLinea.png"));
+    mostrarImagenEnJLabel("C:/Users/PERSONAL/OneDrive/Desktop/pruebas/histograma.png");
+    graficas.add(new ImageIcon("C:/Users/PERSONAL/OneDrive/Desktop/pruebas/histograma.png"));
+        
+        mostrarSiguienteImagen();
         
     }//GEN-LAST:event_btnEjecutarActionPerformed
 
+    public void mostrarImagenEnJLabel(String rutaImagen) {
+        try {
+            graficaActual = new ImageIcon(ImageIO.read(new File(rutaImagen)));
+            jLabel2.setIcon(graficaActual);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
     private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
         
         StringBuilder htmlTable = new StringBuilder();
@@ -538,6 +595,7 @@ private JTextArea getCurrentTextArea() {
         htmlTable.append("</style>\n");
         htmlTable.append("</head>\n");
         htmlTable.append("<body>\n");
+        htmlTable.append("<h1>Tabla de Tokens</h1>\n");
         htmlTable.append("<table>\n");
         htmlTable.append("<tr><th>#</th><th>Token</th><th>Linea</th><th>Columna</th><th>Tipo</th></tr>\n");
 
@@ -560,9 +618,125 @@ private JTextArea getCurrentTextArea() {
         htmlTable.append("</table>\n");
         htmlTable.append("</body>\n");
         htmlTable.append("</html>\n");
+        
+        //Errores
+        StringBuilder htmlErrorTable = new StringBuilder();
+        htmlErrorTable.append("<!DOCTYPE html>\n");
+        htmlErrorTable.append("<html>\n");
+        htmlErrorTable.append("<head>\n");
+        htmlErrorTable.append("<title>Errores</title>\n");
+        htmlErrorTable.append("<style>\n");
+        htmlErrorTable.append("table {\n");
+        htmlErrorTable.append("  border-collapse: collapse;\n");
+        htmlErrorTable.append("  width: 100%;\n");
+        htmlErrorTable.append("}\n");
+        htmlErrorTable.append("th, td {\n");
+        htmlErrorTable.append("  border: 1px solid black;\n");
+        htmlErrorTable.append("  padding: 8px;\n");
+        htmlErrorTable.append("  text-align: left;\n");
+        htmlErrorTable.append("}\n");
+        htmlErrorTable.append("th {\n");
+        htmlErrorTable.append("  background-color: #f2f2f2;\n");
+        htmlErrorTable.append("}\n");
+        htmlErrorTable.append("</style>\n");
+        htmlErrorTable.append("</head>\n");
+        htmlErrorTable.append("<body>\n");
+        htmlErrorTable.append("<h1>Errores</h1>\n");
+        htmlErrorTable.append("<table>\n");
+        htmlErrorTable.append("<tr><th>#</th><th>Error</th><th>Línea</th><th>Columna</th></tr>\n");
+
+        int errorCount = 1; // Inicializamos el contador de errores
+
+        for (codigo.Errores error : codigo.Lexer.errores) {
+            htmlErrorTable.append("<tr><td>");
+            htmlErrorTable.append(errorCount); // Agregamos el número de error
+            htmlErrorTable.append("</td><td>");
+            htmlErrorTable.append(error.getErrorMessage());
+            htmlErrorTable.append("</td><td>");
+            htmlErrorTable.append(error.getLine());
+            htmlErrorTable.append("</td><td>");
+            htmlErrorTable.append(error.getColumn());
+            htmlErrorTable.append("</td></tr>\n");
+            errorCount++; // Incrementamos el contador de errores
+        }
+        for (codigo.Errores error : codigo.Parser.listaDeErrores) {
+            htmlErrorTable.append("<tr><td>");
+            htmlErrorTable.append(errorCount); // Agregamos el número de error
+            htmlErrorTable.append("</td><td>");
+            htmlErrorTable.append(error.getErrorMessage());
+            htmlErrorTable.append("</td><td>");
+            htmlErrorTable.append(error.getLine());
+            htmlErrorTable.append("</td><td>");
+            htmlErrorTable.append(error.getColumn());
+            htmlErrorTable.append("</td></tr>\n");
+            errorCount++; // Incrementamos el contador de errores
+        }
+
+        htmlErrorTable.append("</table>\n");
+        htmlErrorTable.append("</body>\n");
+        htmlErrorTable.append("</html>\n");
+        
+        //Simbolos
+        StringBuilder htmlSymbolTable = new StringBuilder();
+        htmlSymbolTable.append("<!DOCTYPE html>\n");
+        htmlSymbolTable.append("<html>\n");
+        htmlSymbolTable.append("<head>\n");
+        htmlSymbolTable.append("<title>Tabla de Simbolos</title>\n");
+        htmlSymbolTable.append("<style>\n");
+        htmlSymbolTable.append("table {\n");
+        htmlSymbolTable.append("  border-collapse: collapse;\n");
+        htmlSymbolTable.append("  width: 100%;\n");
+        htmlSymbolTable.append("}\n");
+        htmlSymbolTable.append("th, td {\n");
+        htmlSymbolTable.append("  border: 1px solid black;\n");
+        htmlSymbolTable.append("  padding: 8px;\n");
+        htmlSymbolTable.append("  text-align: left;\n");
+        htmlSymbolTable.append("}\n");
+        htmlSymbolTable.append("th {\n");
+        htmlSymbolTable.append("  background-color: #f2f2f2;\n");
+        htmlSymbolTable.append("}\n");
+        htmlSymbolTable.append("</style>\n");
+        htmlSymbolTable.append("</head>\n");
+        htmlSymbolTable.append("<body>\n");
+        htmlSymbolTable.append("<h1>Tabla de Simbolos</h1>\n");
+        htmlSymbolTable.append("<table>\n");
+        htmlSymbolTable.append("<tr><th>#</th><th>Nombre</th><th>Tipo</th><th>Valor</th><th>Linea</th><th>Columna</th></tr>\n");
+        
+        int symbolCount = 1; // Inicializamos el contador de símbolos
+        
+        for (codigo.Simbolos symbol : codigo.Parser.simbolos) {
+            htmlSymbolTable.append("<tr><td>");
+            htmlSymbolTable.append(symbolCount); // Agregamos el número de símbolo
+            htmlSymbolTable.append("</td><td>");
+            htmlSymbolTable.append(symbol.getName());
+            htmlSymbolTable.append("</td><td>");
+            htmlSymbolTable.append(symbol.getType());
+            htmlSymbolTable.append("</td><td>");
+            htmlSymbolTable.append(symbol.getValue());
+            htmlSymbolTable.append("</td><td>");
+            htmlSymbolTable.append(symbol.getLine());
+            htmlSymbolTable.append("</td><td>");
+            htmlSymbolTable.append(symbol.getColumn());
+            htmlSymbolTable.append("</td></tr>\n");
+            symbolCount++; // Incrementamos el contador de símbolos
+        }
+        
+        htmlSymbolTable.append("</table>\n");
+        htmlSymbolTable.append("</body>\n");
+        htmlSymbolTable.append("</html>\n");
 
         generateHTMLReport(htmlTable.toString());
+        generateHTMLReportError(htmlErrorTable.toString());
+        generateHTMLReportSymbol(htmlSymbolTable.toString());
     }//GEN-LAST:event_btnReportesActionPerformed
+
+    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
+        mostrarAnteriorImagen();
+    }//GEN-LAST:event_btnAnteriorActionPerformed
+
+    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
+        mostrarSiguienteImagen();
+    }//GEN-LAST:event_btnSiguienteActionPerformed
 
     public static String analizar(String entrada) {
         try {
@@ -583,22 +757,55 @@ private JTextArea getCurrentTextArea() {
     }
     
     private void generateHTMLReport(String htmlContent) {
-    String filename = "tokens.html";
-    try (PrintWriter out = new PrintWriter(filename)) {
-        out.println(htmlContent);
-    } catch (FileNotFoundException e) {
-        e.printStackTrace();
-    }
+        String filename = "tokens.html";
+        try (PrintWriter out = new PrintWriter(filename)) {
+            out.println(htmlContent);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
-    URI fileURI = new File(filename).toURI();
+        URI fileURI = new File(filename).toURI();
 
-    try {
-        Desktop.getDesktop().browse(fileURI);
-    } catch (Exception e) {
-        e.printStackTrace();
+        try {
+            Desktop.getDesktop().browse(fileURI);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-}
     
+    private void generateHTMLReportError(String htmlContent) {
+        String filename = "errores.html";
+        try (PrintWriter out = new PrintWriter(filename)) {
+            out.println(htmlContent);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        URI fileURI = new File(filename).toURI();
+
+        try {
+            Desktop.getDesktop().browse(fileURI);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void generateHTMLReportSymbol(String htmlContent) {
+        String filename = "tabla_simbolos.html";
+        try (PrintWriter out = new PrintWriter(filename)) {
+            out.println(htmlContent);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        URI fileURI = new File(filename).toURI();
+
+        try {
+            Desktop.getDesktop().browse(fileURI);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * @param args the command line arguments
      */

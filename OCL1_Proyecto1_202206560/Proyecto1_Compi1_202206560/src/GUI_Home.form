@@ -487,6 +487,9 @@
                   <Dimension value="[135, 47]"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAnteriorActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnSiguiente">
               <Properties>
@@ -506,6 +509,9 @@
                   <Dimension value="[135, 47]"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSiguienteActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
